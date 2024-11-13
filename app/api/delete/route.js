@@ -3,9 +3,23 @@ import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
+import checkUser from "@/app/utils/checkUser";
 
 export async function DELETE(req) {
 	try {
+		const user = await checkUser();
+
+		if (!user) {
+			NextResponse.json(
+				{
+					message: "Invlaid User!",
+				},
+				{
+					status: 404,
+				}
+			);
+		}
+
 		req = await req.json();
 
 		let { tripID } = req;
@@ -20,7 +34,7 @@ export async function DELETE(req) {
 			throw new Error("Please give a trip ID!");
 		}
 
-		await connectToDatabase();
+		await connectToDatabase(); // redundant but okay
 
 		const trip = await Trip.findOne({
 			tripID: tripID,
@@ -33,6 +47,17 @@ export async function DELETE(req) {
 				},
 				{
 					status: 404,
+				}
+			);
+		}
+
+		if (trip.email !== user.email) {
+			return NextResponse.json(
+				{
+					message: "You are not authorized to delete this trip!",
+				},
+				{
+					status: 401,
 				}
 			);
 		}

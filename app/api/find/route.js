@@ -3,15 +3,73 @@ import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
+import checkUser from "@/app/utils/checkUser";
+import User from "@/app/models/User";
+
+export async function GET() {
+	try {
+		const user = await checkUser();
+
+		if (!user) {
+			NextResponse.json(
+				{
+					message: "Invlaid User!",
+				},
+				{
+					status: 404,
+				}
+			);
+		}
+
+		await connectToDatabase(); // redundant but okay
+
+		const trips = await Trip.find({
+			email: user.email,
+		});
+
+		return NextResponse.json(
+			{
+				message: "Your Trips!",
+				trips: trips,
+			},
+			{
+				status: 200,
+			}
+		);
+	} catch (error) {
+		console.log(error.message);
+		return NextResponse.json(
+			{
+				message:
+					error.message ||
+					"Something went wrong - Could not fetch your trips.",
+			},
+			{
+				status: 500,
+			}
+		);
+	}
+}
 
 export async function POST(req) {
 	try {
+		const user = await checkUser();
+
+		if (!user) {
+			NextResponse.json(
+				{
+					message: "Invlaid User!",
+				},
+				{
+					status: 404,
+				}
+			);
+		}
+
 		req = await req.json();
 
-		// Form fields:
-		// i)	name – (Full Name) - Text
-		// ii)	year – (Year) – drop down with mapping (1…n) and other
-		// iii)	number – (Mobile Number) – number with check
+		// Return fields:
+		// i)	email – (Email) - string - format email
 
 		// iv)	date – (Departure Date) - string - format yyyy-mm-dd
 		// v)	time – (Time) - drop down - 0-23
@@ -29,7 +87,7 @@ export async function POST(req) {
 			throw new Error("Please give a trip ID!");
 		}
 
-		await connectToDatabase();
+		await connectToDatabase(); // redundant but okay
 
 		const trip = await Trip.findOne({
 			tripID: tripID,
@@ -42,6 +100,17 @@ export async function POST(req) {
 				},
 				{
 					status: 404,
+				}
+			);
+		}
+
+		if (trip.email !== user.email) {
+			return NextResponse.json(
+				{
+					message: "You are not authorized to see this trip!",
+				},
+				{
+					status: 401,
 				}
 			);
 		}
@@ -87,11 +156,38 @@ export async function POST(req) {
 			return Math.abs(tripHours - targetTripHours) <= 3;
 		});
 
+		// for all filtered trips, get the user details
+		// for each trip, get the user details
+		// for each user, get the user details
+		// return the trip details and the user details
+
+		const similiar = await Promise.all(
+			filteredTrips.map(async (trip) => {
+				// Adding condition to keep up with legacy data
+				if (trip.email) {
+					const user = await User.findOne({
+						email: trip.email,
+					});
+					return {
+						...trip._doc,
+						name: user.name,
+						roll: user.roll,
+						number: user.number,
+					};
+				} else return trip;
+			})
+		);
+
 		return NextResponse.json(
 			{
 				message: "Trips found!",
-				trip: trip,
-				similiar: filteredTrips,
+				trip: {
+					...trip._doc,
+					name: user.name,
+					roll: user.roll,
+					number: user.number,
+				},
+				similiar: similiar,
 			},
 			{
 				status: 200,

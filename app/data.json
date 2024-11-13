@@ -1,15 +1,4 @@
 {
-	"years": {
-		"1": "UG 1st Year",
-		"2": "UG 2nd Year",
-		"3": "UG 3rd Year",
-		"4": "UG 4th Year",
-		"5": "UG 5th Year",
-		"6": "PG 1st Year",
-		"7": "PG 2nd Year",
-		"8": "RS",
-		"9": "Other"
-	},
 	"locations": {
 		"IIT": "IIT Kharagpur Campus",
 		"CCU": "Kolkata Airport",

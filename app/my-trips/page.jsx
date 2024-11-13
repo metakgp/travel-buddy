@@ -1,6 +1,6 @@
 import checkUser from "@/app/utils/checkUser";
 import { redirect } from "next/navigation";
-import TripForm from "./TripForm";
+import MyTrips from "./MyTrips";
 
 const Page = async () => {
 	const user = await checkUser();
@@ -9,7 +9,7 @@ const Page = async () => {
 		redirect("/register");
 	}
 
-	return <TripForm email={user.email} />;
+	return <MyTrips />;
 };
 
 export default Page;
