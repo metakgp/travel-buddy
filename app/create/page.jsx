@@ -3,14 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import data from "@/app/data.json";
-
-const Loading = () => {
-	return (
-		<div className="flex items-center justify-center min-h-screen">
-			<div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-		</div>
-	);
-};
+import Loading from "@/app/utils/Loading";
 
 const TripForm = () => {
 	const [formData, setFormData] = useState({
@@ -39,8 +32,6 @@ const TripForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		setLoading(true);
-
 		if (
 			!formData.name ||
 			!formData.year ||
@@ -59,7 +50,9 @@ const TripForm = () => {
 			return;
 		}
 
-		const res = await fetch("/api/register", {
+		setLoading(true);
+
+		const res = await fetch("/api/create", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

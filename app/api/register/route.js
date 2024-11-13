@@ -1,42 +1,33 @@
-import Trip from "@/app/models/Trip";
 import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
+import { checkCookie } from "@/app/utils/checkUser";
+import User from "@/app/models/User";
 
 export async function POST(req) {
 	try {
+		const email = await checkCookie();
+		console.log(email);
+
 		req = await req.json();
 
 		// Form fields:
 		// i)	name – (Full Name) - Text
-		// ii)	year – (Year) – drop down with mapping (1…n) and other
-		// iii)	number – (Mobile Number) – number with check
+		// ii)	roll – (Roll Number) – Text
+		// iii)	number – (Mobile Number) – Text
+		// iv)	email – (Institute Email) – Text
 
-		// iv)	date – (Departure Date) - string - format yyyy-mm-dd
-		// v)	time – (Time) - drop down - 0-23
-		// vi)	source – (Source) – drop down - 3 options: IIT, KGP, HWH, CCU
-		// vii)	destination – (Destination) – drop down - 3 options: IIT, KGP, HWH, CCU
-
-		let { name, year, roll, number, date, time, source, destination } = req;
+		let { name, roll, number } = req;
 
 		name = sanitize(name).trim();
-		year = sanitize(year);
 		roll = sanitize(roll).trim();
 		number = sanitize(number).trim();
-		date = sanitize(date).trim();
-		time = sanitize(time);
-		source = sanitize(source).trim();
-		destination = sanitize(destination).trim();
 
 		if (
 			validator.isEmpty(name) ||
-			!year ||
 			validator.isEmpty(roll) ||
-			validator.isEmpty(date) ||
-			!time ||
-			validator.isEmpty(source) ||
-			validator.isEmpty(destination)
+			validator.isEmpty(number)
 		) {
 			throw new Error("Please fill all the fields!");
 		}
@@ -49,55 +40,20 @@ export async function POST(req) {
 			throw new Error("Please enter a valid 10-digit phone number!");
 		}
 
-		const inputDate = new Date(date);
-		const today = new Date();
-		//set time zone to IST
-		const ISTOffset = 330; // IST offset UTC +5:30
-		today.setMinutes(today.getMinutes() + ISTOffset);
-		// get only yyyy-mm-dd part of date
-		const dateObj = new Date(today.toISOString().slice(0, 10));
-		// check if date is in the future
-		if (inputDate < dateObj) {
-			throw new Error("Please enter a future date!");
-		}
+		await connectToDatabase(); // redundant but okay
 
-		if (source === destination) {
-			throw new Error("Source and destination cannot be same!");
-		}
-
-		await connectToDatabase();
-
-		let flag = true;
-		let tripID;
-		while (flag) {
-			tripID = Math.floor(Math.random() * 900000) + 100000;
-			tripID = tripID.toString();
-			const trip = await Trip.findOne({
-				tripID: tripID,
-			});
-			if (!trip) {
-				flag = false;
-			}
-		}
-
-		const newTrip = new Trip({
+		const newUser = new User({
 			name: name,
-			year: year,
 			roll: roll,
 			number: number,
-			date: date,
-			time: time,
-			source: source,
-			destination: destination,
-			tripID: tripID,
+			email: email,
 		});
 
-		await newTrip.save();
+		await newUser.save();
+
 		return NextResponse.json(
 			{
-				message:
-					"Trip registered successfully! Please copy your Trip ID for future refernce.",
-				tripID: tripID,
+				message: "Registration successful!",
 			},
 			{
 				status: 200,
@@ -109,7 +65,7 @@ export async function POST(req) {
 			{
 				message:
 					error.message ||
-					"Something went wrong - Could not submit your trip details.",
+					"Something went wrong - please try again later!",
 			},
 			{
 				status: 500,
