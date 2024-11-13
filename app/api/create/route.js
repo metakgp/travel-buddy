@@ -12,7 +12,7 @@ export async function POST(req) {
 		if (!user) {
 			NextResponse.json(
 				{
-					message: "Invlaid User!",
+					message: "Invalid User!",
 				},
 				{
 					status: 404,
