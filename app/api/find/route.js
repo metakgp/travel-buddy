@@ -13,7 +13,7 @@ export async function GET() {
 		if (!user) {
 			NextResponse.json(
 				{
-					message: "Invlaid User!",
+					message: "Invalid User!",
 				},
 				{
 					status: 404,
@@ -58,7 +58,7 @@ export async function POST(req) {
 		if (!user) {
 			NextResponse.json(
 				{
-					message: "Invlaid User!",
+					message: "Invalid User!",
 				},
 				{
 					status: 404,
