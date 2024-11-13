@@ -8,7 +8,6 @@ import User from "@/app/models/User";
 export async function POST(req) {
 	try {
 		const email = await checkCookie();
-		console.log(email);
 
 		req = await req.json();
 

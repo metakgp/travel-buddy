@@ -21,13 +21,13 @@ const Home = async () => {
 					href={user ? "/create" : "/register"}
 					className="btn btn-primary btn-lg"
 				>
-					Enter Trip Details
+					Enter New Trip Details
 				</Link>
 				<Link
-					href={user ? "/search" : "/register"}
+					href={user ? "/my-trips" : "/register"}
 					className="btn btn-secondary btn-lg"
 				>
-					Check your Previous Entries
+					My Current Trips
 				</Link>
 			</div>
 			<footer className="mt-5">

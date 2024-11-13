@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import checkUser, { checkCookie } from "../utils/checkUser";
 import RegForm from "./RegForm";
 
-const TripForm = async () => {
+const Page = async () => {
 	const email = await checkCookie();
 
 	const user = await checkUser();
@@ -14,4 +14,4 @@ const TripForm = async () => {
 	return <RegForm email={email} />;
 };
 
-export default TripForm;
+export default Page;
