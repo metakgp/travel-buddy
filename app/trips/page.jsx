@@ -1,14 +1,9 @@
 import Link from "next/link";
-import checkUser from "@/app/utils/checkUser";
 
-const Home = async () => {
-	const user = await checkUser();
-
+const Home = () => {
 	return (
 		<div className="container text-center mt-5">
-			<h1 className="mb-4">
-				Welcome to Travel Buddy {user && " - " + user.name}
-			</h1>
+			<h1 className="mb-4">Welcome to Travel Buddy</h1>
 			<h3>Find your travel partners for your next trip</h3>
 			<br />
 			<h6>
@@ -17,17 +12,14 @@ const Home = async () => {
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3">
-				<Link href={"/"} className="btn btn-primary btn-lg">
+				<Link href="/" className="btn btn-primary btn-lg">
 					Back to Home
 				</Link>
-				<Link
-					href={user ? "/trips/create" : "/register"}
-					className="btn btn-primary btn-lg"
-				>
+				<Link href="/trips/create" className="btn btn-primary btn-lg">
 					Enter New Trip Details
 				</Link>
 				<Link
-					href={user ? "/trips/my-trips" : "/register"}
+					href="/trips/my-trips"
 					className="btn btn-secondary btn-lg"
 				>
 					My Current Trips

@@ -9,6 +9,17 @@ export async function POST(req) {
 	try {
 		const email = await checkCookie();
 
+		if (!email) {
+			return NextResponse.json(
+				{
+					message: "You need to be logged in to register!",
+				},
+				{
+					status: 403,
+				}
+			);
+		}
+
 		req = await req.json();
 
 		// Form fields:
