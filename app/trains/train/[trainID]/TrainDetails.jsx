@@ -2,20 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import mapping from "@/app/data.json";
 
-const TripDetails = ({ tripID }) => {
+const TrainDetails = ({ trainID }) => {
 	const router = useRouter();
 
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
-		const res = await fetch("/api/find", {
+		const res = await fetch("/api/trains/find", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ tripID }),
+			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
@@ -23,20 +22,20 @@ const TripDetails = ({ tripID }) => {
 		} else {
 			const json = await res.json();
 			alert(json.message);
-			router.push("/");
+			router.push("/trains");
 		}
 	};
 
 	useEffect(() => {
 		getDetails();
-	}, [tripID]);
+	}, [trainID]);
 
-	const copyTripID = () => {
+	const copyTrainID = () => {
 		if (data) {
 			navigator.clipboard
-				.writeText(data.trip.tripID)
+				.writeText(data.train.trainID)
 				.then(() => {
-					alert("Trip ID copied to clipboard!");
+					alert("Train ID copied to clipboard!");
 				})
 				.catch((err) => {
 					console.error("Failed to copy: ", err);
@@ -52,20 +51,20 @@ const TripDetails = ({ tripID }) => {
 		window.open(`https://wa.me/+91${number}`);
 	};
 
-	const deleteTrip = async (tripID) => {
-		if (!confirm("Are you sure you want to delete this trip?")) return;
+	const deleteTrain = async (trainID) => {
+		if (!confirm("Are you sure you want to delete this train?")) return;
 
-		const res = await fetch("/api/delete", {
+		const res = await fetch("/api/trains/delete", {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ tripID }),
+			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
 			alert(json.message);
-			router.push("/");
+			router.push("/trains");
 		} else {
 			const json = await res.json();
 			alert(json.message);
@@ -77,71 +76,64 @@ const TripDetails = ({ tripID }) => {
 			{data ? (
 				<div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
 					<h2 className="text-2xl font-bold mb-4 text-center">
-						Trip Details
+						Train Trip Details
 					</h2>
 					<h3 className="text-lg font-semibold">
-						Trip ID:{" "}
+						Train Trip ID:{" "}
 						<span className="text-blue-600">
-							{data.trip.tripID}
+							{data.train.trainID}
 						</span>
 						<button
-							onClick={copyTripID}
+							onClick={copyTrainID}
 							className="ml-2 text-sm text-white bg-blue-500 p-2 rounded hover:bg-blue-600 transition"
 						>
-							Copy Trip ID
+							Copy Train Trip ID
 						</button>
 					</h3>
 					<p>
-						<strong>Name:</strong> {data.trip.name}
+						<strong>Name:</strong> {data.train.name}
 					</p>
 					<p>
-						<strong>Roll Number:</strong> {data.trip.roll}
+						<strong>Roll Number:</strong> {data.train.roll}
 					</p>
 					<p>
-						<strong>Mobile Number:</strong> {data.trip.number}
+						<strong>Mobile Number:</strong> {data.train.number}
 					</p>
 					<p>
-						<strong>Email: </strong> {data.trip.email}
+						<strong>Email: </strong> {data.train.email}
 					</p>
 					<p>
-						<strong>Source:</strong>{" "}
-						{mapping.locations[data.trip.source]}
-					</p>
-					<p>
-						<strong>Destination:</strong>{" "}
-						{mapping.locations[data.trip.destination]}
+						<strong>Train Number:</strong> {data.train.trainNumber}
 					</p>
 					<p>
 						<strong>Date:</strong>{" "}
-						{new Date(data.trip.date).toLocaleDateString()}
-						&nbsp;&nbsp;
-						<strong>Time Slot:</strong>{" "}
-						{mapping.slots[data.trip.time]}
+						{new Date(data.train.date).toLocaleDateString()}
 					</p>
 
 					<h3 className="text-lg font-semibold mt-4">
-						Common Trips (within 3 hours):
+						Common Trains Trips (Same Train Number and Date):
 					</h3>
 					<ul className="mt-2">
 						{data.similiar.length === 0 && (
 							<p>
-								No common trips found! Please check again later.
+								No common train trips found! Please check again
+								later.
 							</p>
 						)}
-						{data.similiar.map((trip, idx) => (
+						{data.similiar.map((train, idx) => (
 							<li key={idx} className="border p-2">
 								<p>
-									<strong>Name:</strong> {trip.name}
+									<strong>Name:</strong> {train.name}
 								</p>
 								<p>
-									<strong>Roll Number:</strong> {trip.roll}
+									<strong>Roll Number:</strong> {train.roll}
 								</p>
 								<p>
 									<strong>Mobile Number:</strong>{" "}
-									{trip.number}
+									{train.number}
 									<button
 										onClick={() =>
-											handleCall(data.trip.number)
+											handleCall(data.train.number)
 										}
 										className="ml-2 bg-blue-500 text-white p-1 px-2 rounded"
 									>
@@ -149,7 +141,7 @@ const TripDetails = ({ tripID }) => {
 									</button>
 									<button
 										onClick={() =>
-											handleWhatsApp(data.trip.number)
+											handleWhatsApp(data.train.number)
 										}
 										className="ml-2 bg-green-500 text-white p-1 px-2 rounded"
 									>
@@ -159,47 +151,40 @@ const TripDetails = ({ tripID }) => {
 								<p>
 									<strong>Email: </strong>{" "}
 									<a
-										href={`mailto:${trip.email}`}
+										href={`mailto:${train.email}`}
 										target="_blank"
 									>
-										{trip.email}
+										{train.email}
 									</a>
 								</p>
 								<p>
-									<strong>Source:</strong>{" "}
-									{mapping.locations[trip.source]}
-								</p>
-								<p>
-									<strong>Destination:</strong>{" "}
-									{mapping.locations[trip.destination]}
+									<strong>Train Number:</strong>{" "}
+									{train.trainNumber}
 								</p>
 								<p>
 									<strong>Date:</strong>{" "}
-									{new Date(trip.date).toLocaleDateString()}
-									&nbsp;&nbsp;
-									<strong>Time Slot:</strong>{" "}
-									{mapping.slots[trip.time]}
+									{new Date(train.date).toLocaleDateString()}
 								</p>
 							</li>
 						))}
 					</ul>
 					<button
-						onClick={() => router.push("/")}
-						className="mt-3 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-					>
-						Back to Home
-					</button>
-					<button
-						onClick={() => router.push("/my-trips")}
+						onClick={() => router.push("/trains/my-trains")}
 						className="mt-2 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
 					>
-						My Trips
+						My Train Trips
 					</button>
 					<button
-						onClick={() => deleteTrip(data.trip.tripID)}
+						onClick={() => deleteTrain(data.train.trainID)}
 						className="mt-2 w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition"
 					>
-						Delete this Trip
+						Delete this Train Trip
+					</button>
+					<button
+						onClick={() => router.push("/trains")}
+						className="mt-3 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+					>
+						Back to Trains Page
 					</button>
 				</div>
 			) : (
@@ -211,4 +196,4 @@ const TripDetails = ({ tripID }) => {
 	);
 };
 
-export default TripDetails;
+export default TrainDetails;

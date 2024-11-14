@@ -31,6 +31,7 @@ const tripSchema = new Schema({
 	tripID: {
 		type: Number,
 		required: [true, "Please provide a trip ID"],
+		unique: true,
 	},
 });
 

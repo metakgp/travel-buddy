@@ -2,16 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import data from "@/app/data.json";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
 
-const TripForm = ({ email }) => {
+const TrainForm = ({ email }) => {
 	const [formData, setFormData] = useState({
+		trainNumber: "",
 		date: "",
-		time: "",
-		source: "",
-		destination: "",
 	});
 
 	const [loading, setLoading] = useState(false);
@@ -29,24 +26,14 @@ const TripForm = ({ email }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (
-			!formData.date ||
-			!formData.time ||
-			!formData.source ||
-			!formData.destination
-		) {
+		if (!formData.trainNumber || !formData.date) {
 			alert("Please fill all the fields!");
-			return;
-		}
-
-		if (formData.source === formData.destination) {
-			alert("Source and destination cannot be same!");
 			return;
 		}
 
 		setLoading(true);
 
-		const res = await fetch("/api/create", {
+		const res = await fetch("/api/trains/create", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -59,7 +46,7 @@ const TripForm = ({ email }) => {
 		if (res.ok) {
 			const json = await res.json();
 			alert(json.message);
-			router.push(`/trip/${json.tripID}`);
+			router.push(`/trains/train/${json.trainID}`);
 		} else {
 			const json = await res.json();
 			alert(json.message);
@@ -76,7 +63,7 @@ const TripForm = ({ email }) => {
 					className="bg-white p-6 rounded shadow-md w-full max-w-md"
 				>
 					<h2 className="text-2xl font-bold mb-4 text-center">
-						Create New Trip
+						Create New Train Trip
 					</h2>
 
 					{/* Form fields */}
@@ -95,6 +82,20 @@ const TripForm = ({ email }) => {
 
 					<div className="mb-4">
 						<label className="block text-gray-700">
+							Train Number:
+						</label>
+						<input
+							type="text"
+							name="trainNumber"
+							value={formData.trainNumber}
+							onChange={handleChange}
+							required
+							className="border rounded-md p-2 w-full"
+						/>
+					</div>
+
+					<div className="mb-4">
+						<label className="block text-gray-700">
 							Departure Date:
 						</label>
 						<input
@@ -107,64 +108,6 @@ const TripForm = ({ email }) => {
 						/>
 					</div>
 
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Time Slot:
-						</label>
-						<select
-							name="time"
-							value={formData.time}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Time Slot</option>
-							{Object.keys(data.slots).map((slot) => (
-								<option key={slot} value={slot}>
-									{data.slots[slot]}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">Source:</label>
-						<select
-							name="source"
-							value={formData.source}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Source</option>
-							{Object.keys(data.locations).map((location) => (
-								<option key={location} value={location}>
-									{data.locations[location]}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Destination:
-						</label>
-						<select
-							name="destination"
-							value={formData.destination}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Destination</option>
-							{Object.keys(data.locations).map((location) => (
-								<option key={location} value={location}>
-									{data.locations[location]}
-								</option>
-							))}
-						</select>
-					</div>
-
 					<div>
 						<button
 							type="submit"
@@ -173,9 +116,9 @@ const TripForm = ({ email }) => {
 							Submit
 						</button>
 
-						<Link href="/">
+						<Link href="/trains">
 							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
-								Back to Home
+								Back to Trains Page
 							</button>
 						</Link>
 					</div>
@@ -185,4 +128,4 @@ const TripForm = ({ email }) => {
 	);
 };
 
-export default TripForm;
+export default TrainForm;
