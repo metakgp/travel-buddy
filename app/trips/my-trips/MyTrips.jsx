@@ -74,12 +74,12 @@ const MyTrips = () => {
 							<p>No trips found</p>
 						)}
 						<Link href="/trips/create">
-							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
+							<button className="mt-4 w-full btn btn-primary">
 								Enter New Trip Details
 							</button>
 						</Link>
 						<Link href="/trips">
-							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
+							<button className="mt-4 w-full btn btn-secondary">
 								Back to Trips Page
 							</button>
 						</Link>

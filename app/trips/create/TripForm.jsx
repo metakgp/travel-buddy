@@ -66,122 +66,107 @@ const TripForm = ({ email }) => {
 		}
 	};
 
-	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100">
-			{loading ? (
-				<Loading />
-			) : (
-				<form
-					onSubmit={handleSubmit}
-					className="bg-white p-6 rounded shadow-md w-full max-w-md"
+	return loading ? (
+		<Loading />
+	) : (
+		<form
+			onSubmit={handleSubmit}
+			className="bg-white p-6 rounded shadow-md w-full max-w-md"
+		>
+			<h2 className="text-2xl font-bold mb-4 text-center">
+				Create New Trip
+			</h2>
+
+			{/* Form fields */}
+			<div className="mb-4">
+				<label className="block text-gray-700">Email Address:</label>
+				<input
+					type="text"
+					name="email"
+					value={email}
+					disabled
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block text-gray-700">Departure Date:</label>
+				<input
+					type="date"
+					name="date"
+					value={formData.date}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block text-gray-700">Time Slot:</label>
+				<select
+					name="time"
+					value={formData.time}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
 				>
-					<h2 className="text-2xl font-bold mb-4 text-center">
-						Create New Trip
-					</h2>
+					<option value="">Select Time Slot</option>
+					{Object.keys(data.slots).map((slot) => (
+						<option key={slot} value={slot}>
+							{data.slots[slot]}
+						</option>
+					))}
+				</select>
+			</div>
 
-					{/* Form fields */}
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Email Address:
-						</label>
-						<input
-							type="text"
-							name="email"
-							value={email}
-							disabled
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
+			<div className="mb-4">
+				<label className="block text-gray-700">Source:</label>
+				<select
+					name="source"
+					value={formData.source}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
+				>
+					<option value="">Select Source</option>
+					{Object.keys(data.locations).map((location) => (
+						<option key={location} value={location}>
+							{data.locations[location]}
+						</option>
+					))}
+				</select>
+			</div>
 
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Departure Date:
-						</label>
-						<input
-							type="date"
-							name="date"
-							value={formData.date}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
+			<div className="mb-4">
+				<label className="block text-gray-700">Destination:</label>
+				<select
+					name="destination"
+					value={formData.destination}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
+				>
+					<option value="">Select Destination</option>
+					{Object.keys(data.locations).map((location) => (
+						<option key={location} value={location}>
+							{data.locations[location]}
+						</option>
+					))}
+				</select>
+			</div>
 
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Time Slot:
-						</label>
-						<select
-							name="time"
-							value={formData.time}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Time Slot</option>
-							{Object.keys(data.slots).map((slot) => (
-								<option key={slot} value={slot}>
-									{data.slots[slot]}
-								</option>
-							))}
-						</select>
-					</div>
+			<div>
+				<button type="submit" className="w-full btn btn-primary">
+					Submit
+				</button>
 
-					<div className="mb-4">
-						<label className="block text-gray-700">Source:</label>
-						<select
-							name="source"
-							value={formData.source}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Source</option>
-							{Object.keys(data.locations).map((location) => (
-								<option key={location} value={location}>
-									{data.locations[location]}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Destination:
-						</label>
-						<select
-							name="destination"
-							value={formData.destination}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						>
-							<option value="">Select Destination</option>
-							{Object.keys(data.locations).map((location) => (
-								<option key={location} value={location}>
-									{data.locations[location]}
-								</option>
-							))}
-						</select>
-					</div>
-
-					<div>
-						<button
-							type="submit"
-							className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-						>
-							Submit
-						</button>
-
-						<Link href="/trips">
-							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
-								Back to Trips Page
-							</button>
-						</Link>
-					</div>
-				</form>
-			)}
-		</div>
+				<Link href="/trips">
+					<button className="mt-4 w-full btn btn-secondary">
+						Back to Trips Page
+					</button>
+				</Link>
+			</div>
+		</form>
 	);
 };
 

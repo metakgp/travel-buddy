@@ -61,84 +61,72 @@ export default function RegForm({ email }) {
 		}
 	};
 
-	return (
-		<div className="flex items-center justify-center min-h-screen bg-gray-100">
-			{loading ? (
-				<Loading />
-			) : (
-				<form
-					onSubmit={handleSubmit}
-					className="bg-white p-6 rounded shadow-md w-full max-w-md"
+	return loading ? (
+		<Loading />
+	) : (
+		<form
+			onSubmit={handleSubmit}
+			className="bg-white p-6 rounded shadow-md w-full max-w-md"
+		>
+			<h2 className="text-2xl font-bold mb-4 text-center">
+				Create Account
+			</h2>
+
+			{/* Form fields */}
+			<div className="mb-4">
+				<label className="block text-gray-700">Full Name:</label>
+				<input
+					type="text"
+					name="name"
+					value={formData.name}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block text-gray-700">Roll Number:</label>
+				<input
+					type="text"
+					name="roll"
+					value={formData.roll}
+					onChange={handleChange}
+					required
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block text-gray-700">Mobile Number:</label>
+				<input
+					type="text"
+					name="number"
+					value={formData.number}
+					onChange={handleChange}
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div className="mb-4">
+				<label className="block text-gray-700">Email Address:</label>
+				<input
+					type="text"
+					name="email"
+					value={email}
+					disabled
+					className="border rounded-md p-2 w-full"
+				/>
+			</div>
+
+			<div>
+				<button
+					type="submit"
+					className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
 				>
-					<h2 className="text-2xl font-bold mb-4 text-center">
-						Create Account
-					</h2>
-
-					{/* Form fields */}
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Full Name:
-						</label>
-						<input
-							type="text"
-							name="name"
-							value={formData.name}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Roll Number:
-						</label>
-						<input
-							type="text"
-							name="roll"
-							value={formData.roll}
-							onChange={handleChange}
-							required
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Mobile Number:
-						</label>
-						<input
-							type="text"
-							name="number"
-							value={formData.number}
-							onChange={handleChange}
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
-
-					<div className="mb-4">
-						<label className="block text-gray-700">
-							Email Address:
-						</label>
-						<input
-							type="text"
-							name="email"
-							value={email}
-							disabled
-							className="border rounded-md p-2 w-full"
-						/>
-					</div>
-
-					<div>
-						<button
-							type="submit"
-							className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-						>
-							Submit
-						</button>
-					</div>
-				</form>
-			)}
-		</div>
+					Submit
+				</button>
+			</div>
+		</form>
 	);
 }
