@@ -5,7 +5,7 @@ import TripDetails from "./TripDetails";
 const Page = async ({ params }) => {
 	const tripID = params.tripID;
 
-	const user = await checkUser();
+	const user = await checkUser({ verify: false });
 
 	if (!user) {
 		redirect("/register");

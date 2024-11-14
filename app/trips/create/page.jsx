@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import TripForm from "./TripForm";
 
 const Page = async () => {
-	const user = await checkUser();
+	const user = await checkUser({ verify: false });
 
 	if (!user) {
 		redirect("/register");

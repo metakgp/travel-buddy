@@ -7,7 +7,7 @@ import checkUser from "@/app/utils/checkUser";
 
 export async function POST(req) {
 	try {
-		const user = await checkUser();
+		const user = await checkUser({ verify: true });
 
 		if (!user) {
 			NextResponse.json(

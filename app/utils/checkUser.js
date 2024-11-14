@@ -3,8 +3,8 @@ import User from "@/app/models/User";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import Axios from "axios";
 
-export default async function checkUser() {
-	const email = await checkCookie();
+export default async function checkUser({ verify }) {
+	const email = await checkCookie({ verify });
 
 	if (!email) {
 		return null;
@@ -19,7 +19,7 @@ export default async function checkUser() {
 	return user;
 }
 
-export async function checkCookie() {
+export async function checkCookie({ verify }) {
 	try {
 		const cookieStore = cookies();
 		const cookie = cookieStore.get("heimdall");
@@ -30,20 +30,30 @@ export async function checkCookie() {
 
 		const jwt = cookie.value;
 
-		const response = await Axios.get(
-			"https://heimdall-api.metakgp.org/validate-jwt",
-			{
-				headers: {
-					Cookie: Object.entries({
-						heimdall: jwt,
-					})
-						.map(([key, value]) => `${key}=${value}`)
-						.join("; "),
-				},
-			}
-		);
+		if (!jwt) {
+			return null;
+		}
 
-		const email = response.data.email;
+		var email;
+		if (verify) {
+			const response = await Axios.get(
+				"https://heimdall-api.metakgp.org/validate-jwt",
+				{
+					headers: {
+						Cookie: Object.entries({
+							heimdall: jwt,
+						})
+							.map(([key, value]) => `${key}=${value}`)
+							.join("; "),
+					},
+				}
+			);
+			email = response.data.email;
+			// console.log("verified email", email);
+		} else {
+			email = JSON.parse(atob(jwt.split(".")[1])).email; // get the user email from jwt
+			// console.log("extracted email", email);
+		}
 
 		if (!email) {
 			return null;
