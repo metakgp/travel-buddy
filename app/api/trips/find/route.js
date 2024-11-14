@@ -8,7 +8,7 @@ import User from "@/app/models/User";
 
 export async function GET() {
 	try {
-		const user = await checkUser();
+		const user = await checkUser({ verify: true });
 
 		if (!user) {
 			NextResponse.json(
@@ -53,7 +53,7 @@ export async function GET() {
 
 export async function POST(req) {
 	try {
-		const user = await checkUser();
+		const user = await checkUser({ verify: true });
 
 		if (!user) {
 			NextResponse.json(

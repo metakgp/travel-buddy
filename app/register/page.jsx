@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
-import checkUser, { checkCookie } from "../utils/checkUser";
+import checkUser, { checkCookie } from "@/app/utils/checkUser";
 import RegForm from "./RegForm";
 
 const Page = async () => {
-	const email = await checkCookie();
+	const email = await checkCookie({ verify: false });
 
 	if (!email) {
 		redirect(
@@ -11,7 +11,7 @@ const Page = async () => {
 		);
 	}
 
-	const user = await checkUser();
+	const user = await checkUser({ verify: false });
 
 	if (user) {
 		redirect("/");

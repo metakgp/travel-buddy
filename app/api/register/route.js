@@ -7,7 +7,7 @@ import User from "@/app/models/User";
 
 export async function POST(req) {
 	try {
-		const email = await checkCookie();
+		const email = await checkCookie({ verify: true });
 
 		if (!email) {
 			return NextResponse.json(

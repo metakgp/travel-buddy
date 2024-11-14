@@ -7,7 +7,7 @@ import checkUser from "@/app/utils/checkUser";
 
 export async function DELETE(req) {
 	try {
-		const user = await checkUser();
+		const user = await checkUser({ verify: true });
 
 		if (!user) {
 			NextResponse.json(
