@@ -1,11 +1,14 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import User from "@/app/models/User";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import Axios from "axios";
 
 export default async function checkUser() {
 	const email = await checkCookie();
+
+	if (!email) {
+		return null;
+	}
 
 	await connectToDatabase();
 
@@ -22,10 +25,9 @@ export async function checkCookie() {
 		const cookie = cookieStore.get("heimdall");
 
 		if (!cookie) {
-			redirect(
-				"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-			);
+			return null;
 		}
+
 		const jwt = cookie.value;
 
 		const response = await Axios.get(
@@ -44,16 +46,12 @@ export async function checkCookie() {
 		const email = response.data.email;
 
 		if (!email) {
-			redirect(
-				"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-			);
+			return null;
 		}
 
 		return email;
 	} catch (e) {
 		console.log(e);
-		redirect(
-			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-		);
+		return null;
 	}
 }

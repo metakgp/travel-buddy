@@ -5,6 +5,12 @@ import RegForm from "./RegForm";
 const Page = async () => {
 	const email = await checkCookie();
 
+	if (!email) {
+		redirect(
+			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
+		);
+	}
+
 	const user = await checkUser();
 
 	if (user) {
