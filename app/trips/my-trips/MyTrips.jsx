@@ -11,7 +11,7 @@ const MyTrips = () => {
 	const router = useRouter();
 
 	const getDetails = async () => {
-		const res = await fetch("/api/find", {
+		const res = await fetch("/api/trips/find", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -23,7 +23,7 @@ const MyTrips = () => {
 		} else {
 			const json = await res.json();
 			alert(json.message);
-			router.push("/");
+			router.push("/trips");
 		}
 	};
 
@@ -32,7 +32,7 @@ const MyTrips = () => {
 	}, []);
 
 	const handleSearch = (id) => {
-		router.push(`/trip/${id}`);
+		router.push(`/trips/trip/${id}`);
 	};
 
 	return myTrips ? (
@@ -73,14 +73,14 @@ const MyTrips = () => {
 						) : (
 							<p>No trips found</p>
 						)}
-						<Link href="/create">
+						<Link href="/trips/create">
 							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
 								Enter New Trip Details
 							</button>
 						</Link>
-						<Link href="/">
+						<Link href="/trips">
 							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
-								Back to Home
+								Back to Trips Page
 							</button>
 						</Link>
 					</div>

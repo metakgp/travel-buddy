@@ -9,20 +9,28 @@ const Home = async () => {
 			<h1 className="mb-4">
 				Welcome to Travel Buddy {user && " - " + user.name}
 			</h1>
-			<h3>Find your travel partners for your next trip or train ride</h3>
+			<h3>Find your travel partners for your next trip</h3>
+			<br />
+			<h6>
+				Enter your trip details and find other travelers with similar
+				plans - within 3 hours of your trip time
+			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3">
-				<Link
-					href={user ? "/trips" : "/register"}
-					className="btn btn-primary btn-lg"
-				>
-					Trips
+				<Link href={"/"} className="btn btn-primary btn-lg">
+					Back to Home
 				</Link>
 				<Link
-					href={user ? "/trains" : "/register"}
+					href={user ? "/trips/create" : "/register"}
+					className="btn btn-primary btn-lg"
+				>
+					Enter New Trip Details
+				</Link>
+				<Link
+					href={user ? "/trips/my-trips" : "/register"}
 					className="btn btn-secondary btn-lg"
 				>
-					Trains
+					My Current Trips
 				</Link>
 			</div>
 			<footer className="mt-5">
