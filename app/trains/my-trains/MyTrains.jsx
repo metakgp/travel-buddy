@@ -69,12 +69,12 @@ const MyTrains = () => {
 							<p>No trains found</p>
 						)}
 						<Link href="/trains/create">
-							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
+							<button className="mt-4 w-full btn btn-primary">
 								Enter New Train Details
 							</button>
 						</Link>
 						<Link href="/trains">
-							<button className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">
+							<button className="mt-4 w-full btn btn-secondary">
 								Back to Trains Page
 							</button>
 						</Link>

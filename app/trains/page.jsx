@@ -11,20 +11,20 @@ const Home = () => {
 				the same train on the same day
 			</h6>
 			<br />
-			<div className="d-flex justify-content-center gap-3">
-				<Link href="/" className="btn btn-primary btn-lg">
-					Back to Home
-				</Link>
+			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
 				<Link href="/trains/create" className="btn btn-primary btn-lg">
 					Enter New Train Details
 				</Link>
 				<Link
 					href="/trains/my-trains"
-					className="btn btn-secondary btn-lg"
+					className="btn btn-primary btn-lg"
 				>
 					My Current Train Trips
 				</Link>
 			</div>
+			<Link href="/" className="btn btn-secondary btn-lg">
+				Back to Home
+			</Link>
 			<footer className="mt-5">
 				<p>
 					Please note that this application is made to help KGPians

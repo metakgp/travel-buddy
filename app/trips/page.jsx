@@ -11,20 +11,17 @@ const Home = () => {
 				plans - within 3 hours of your trip time
 			</h6>
 			<br />
-			<div className="d-flex justify-content-center gap-3">
-				<Link href="/" className="btn btn-primary btn-lg">
-					Back to Home
-				</Link>
+			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
 				<Link href="/trips/create" className="btn btn-primary btn-lg">
 					Enter New Trip Details
 				</Link>
-				<Link
-					href="/trips/my-trips"
-					className="btn btn-secondary btn-lg"
-				>
+				<Link href="/trips/my-trips" className="btn btn-primary btn-lg">
 					My Current Trips
 				</Link>
 			</div>
+			<Link href="/" className="btn btn-secondary btn-lg">
+				Back to Home
+			</Link>
 			<footer className="mt-5">
 				<p>
 					Please note that this application is made to help KGPians
