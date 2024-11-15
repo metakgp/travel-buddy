@@ -23,6 +23,15 @@ export async function GET() {
 
 		await connectToDatabase(); // redundant but okay
 
+		// Delete old entries
+		const today = new Date();
+		//set time zone to IST
+		const ISTOffset = 330; // IST offset UTC +5:30
+		today.setMinutes(today.getMinutes() + ISTOffset);
+		await Trip.deleteMany({
+			date: { $lt: today.toISOString().slice(0, 10) },
+		});
+
 		const trips = await Trip.find({
 			email: user.email,
 		});
