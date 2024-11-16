@@ -7,7 +7,7 @@ const Home = () => {
 			<h3>Find your travel partners for your next train ride</h3>
 			<br />
 			<h6>
-				Enter your tarin details and find other travelers traveling on
+				Enter your train details and find other travelers traveling on
 				the same train on the same day
 			</h6>
 			<br />
