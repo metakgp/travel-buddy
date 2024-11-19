@@ -76,9 +76,9 @@ const TripDetails = ({ tripID }) => {
 	return data ? (
 		<div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
 			<h2 className="text-2xl font-bold mb-4 text-center">
-				Trip Details
+				Trip Details - {data.trip.tripID}
 			</h2>
-			<h3 className="text-lg font-semibold">
+			{/* <h3 className="text-lg font-semibold">
 				Trip ID:{" "}
 				<span className="text-blue-600">{data.trip.tripID}</span>
 				<button
@@ -87,7 +87,7 @@ const TripDetails = ({ tripID }) => {
 				>
 					Copy Trip ID
 				</button>
-			</h3>
+			</h3> */}
 			<p>
 				<strong>Name:</strong> {data.trip.name}
 			</p>
@@ -115,9 +115,9 @@ const TripDetails = ({ tripID }) => {
 			</p>
 
 			<h3 className="text-lg font-semibold mt-4">
-				Common Trips (within 3 hours):
+				Common Trips (within +/- 3 hours):
 			</h3>
-			<ol className="mt-2">
+			<ul className="mt-2">
 				{data.similiar.length === 0 && (
 					<p>No common trips found! Please check again later.</p>
 				)}
@@ -167,7 +167,7 @@ const TripDetails = ({ tripID }) => {
 						</p>
 					</li>
 				))}
-			</ol>
+			</ul>
 			<button
 				onClick={() => router.push("/trips/my-trips")}
 				className="mt-2 w-full btn btn-primary"

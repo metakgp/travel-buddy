@@ -63,7 +63,6 @@ const TrainForm = ({ email }) => {
 			<h2 className="text-2xl font-bold mb-4 text-center">
 				Create New Train Trip
 			</h2>
-
 			{/* Form fields */}
 			<div className="mb-4">
 				<label className="block text-gray-700">Email Address:</label>
@@ -75,7 +74,6 @@ const TrainForm = ({ email }) => {
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>
-
 			<div className="mb-4">
 				<label className="block text-gray-700">Train Number:</label>
 				<input
@@ -87,7 +85,6 @@ const TrainForm = ({ email }) => {
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>
-
 			<div className="mb-4">
 				<label className="block text-gray-700">Departure Date:</label>
 				<input
@@ -99,7 +96,10 @@ const TrainForm = ({ email }) => {
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>
-
+			Please <Link href="/trips">add trip(s)</Link> seperately to check
+			for common trips to/from the stations.
+			<br />
+			<br />
 			<div>
 				<button type="submit" className="w-full btn btn-primary">
 					Submit

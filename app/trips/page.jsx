@@ -8,7 +8,7 @@ const Home = () => {
 			<br />
 			<h6>
 				Enter your trip details and find other travelers with similar
-				plans - within 3 hours of your trip time
+				plans - within +/- 3 hours of your own trip timing.
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">

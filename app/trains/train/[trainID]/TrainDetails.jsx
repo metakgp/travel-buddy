@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Loading from "@/app/utils/Loading";
 
 const TrainDetails = ({ trainID }) => {
@@ -75,9 +76,9 @@ const TrainDetails = ({ trainID }) => {
 	return data ? (
 		<div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
 			<h2 className="text-2xl font-bold mb-4 text-center">
-				Train Trip Details
+				Train Trip Details - {data.train.trainID}
 			</h2>
-			<h3 className="text-lg font-semibold">
+			{/* <h3 className="text-lg font-semibold">
 				Train Trip ID:{" "}
 				<span className="text-blue-600">{data.train.trainID}</span>
 				<button
@@ -86,7 +87,7 @@ const TrainDetails = ({ trainID }) => {
 				>
 					Copy Train Trip ID
 				</button>
-			</h3>
+			</h3> */}
 			<p>
 				<strong>Name:</strong> {data.train.name}
 			</p>
@@ -106,7 +107,6 @@ const TrainDetails = ({ trainID }) => {
 				<strong>Date:</strong>{" "}
 				{new Date(data.train.date).toLocaleDateString()}
 			</p>
-
 			<h3 className="text-lg font-semibold mt-4">
 				Common Trains Trips (Same Train Number and Date):
 			</h3>
@@ -157,6 +157,8 @@ const TrainDetails = ({ trainID }) => {
 					</li>
 				))}
 			</ul>
+			Please <Link href="/trips">add trip(s)</Link> seperately to check
+			for common trips to/from the stations.
 			<button
 				onClick={() => router.push("/trains/my-trains")}
 				className="mt-2 w-full btn btn-primary"

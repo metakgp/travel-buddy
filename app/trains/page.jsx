@@ -7,8 +7,12 @@ const Home = () => {
 			<h3>Find your travel partners for your next train ride</h3>
 			<br />
 			<h6>
-				Enter your train details and find other travelers traveling on
-				the same train on the same day
+				Enter your train journey details and find other travelers on the
+				same train.
+				<br />
+				<br />
+				Please <Link href="/trips">add trip(s)</Link> seperately to
+				check for common trips to/from the stations.
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">

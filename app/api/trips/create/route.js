@@ -88,8 +88,7 @@ export async function POST(req) {
 		await newTrip.save();
 		return NextResponse.json(
 			{
-				message:
-					"Trip registered successfully! Please copy your Trip ID for future reference.",
+				message: "Trip saved successfully!",
 				tripID: tripID,
 			},
 			{

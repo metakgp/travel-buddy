@@ -113,7 +113,7 @@ To use Travel Buddy, follow these steps:
 
 ### Matching Logic
 
--   **Trip Matching:** Finds other travelers with trip times within 3 hours of your specified time.
+-   **Trip Matching:** Finds other travelers with trip times within +/- 3 hours of your specified time.
 -   **Train Matching:** Matches travelers based on the train number and departure date.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
