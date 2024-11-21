@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-const Home = () => {
+export const metadata = {
+	title: "Train Trips",
+};
+
+const Page = () => {
 	return (
 		<div className="container text-center mt-5">
 			<h1 className="mb-4">Welcome to Travel Buddy</h1>
@@ -41,4 +45,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default Page;

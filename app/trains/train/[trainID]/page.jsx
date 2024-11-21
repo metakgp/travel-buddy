@@ -2,6 +2,10 @@ import checkUser from "@/app/utils/checkUser";
 import { redirect } from "next/navigation";
 import TrainDetails from "./TrainDetails";
 
+export const metadata = {
+	title: "Train Trip Details",
+};
+
 const Page = async ({ params }) => {
 	const trainID = params.trainID;
 
