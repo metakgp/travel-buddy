@@ -23,14 +23,14 @@ export async function GET() {
 
 		await connectToDatabase(); // redundant but okay
 
-		// Delete old entries
-		const today = new Date();
-		//set time zone to IST
-		const ISTOffset = 330; // IST offset UTC +5:30
-		today.setMinutes(today.getMinutes() + ISTOffset);
-		await Train.deleteMany({
-			date: { $lt: today.toISOString().slice(0, 10) },
-		});
+		// // Delete old entries
+		// const today = new Date();
+		// //set time zone to IST
+		// const ISTOffset = 330; // IST offset UTC +5:30
+		// today.setMinutes(today.getMinutes() + ISTOffset);
+		// await Train.deleteMany({
+		// 	date: { $lt: today.toISOString().slice(0, 10) },
+		// });
 
 		const trains = await Train.find({
 			email: user.email,
