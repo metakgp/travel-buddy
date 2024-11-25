@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
+import { today } from "@/app/utils/date";
 
 const TrainForm = ({ email }) => {
 	const [formData, setFormData] = useState({
@@ -93,6 +94,7 @@ const TrainForm = ({ email }) => {
 					value={formData.date}
 					onChange={handleChange}
 					required
+					min={today().toISOString().slice(0, 10)}
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>

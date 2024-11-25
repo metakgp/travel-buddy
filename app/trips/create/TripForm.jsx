@@ -5,6 +5,7 @@ import { useState } from "react";
 import data from "@/app/data.json";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
+import { today } from "@/app/utils/date";
 
 const TripForm = ({ email }) => {
 	const [formData, setFormData] = useState({
@@ -97,6 +98,7 @@ const TripForm = ({ email }) => {
 					value={formData.date}
 					onChange={handleChange}
 					required
+					min={today().toISOString().slice(0, 10)}
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>

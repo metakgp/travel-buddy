@@ -5,6 +5,7 @@ import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import checkUser from "@/app/utils/checkUser";
 import User from "@/app/models/User";
+import { today } from "@/app/utils/date";
 
 export async function GET() {
 	try {
@@ -24,12 +25,9 @@ export async function GET() {
 		await connectToDatabase(); // redundant but okay
 
 		// // Delete old entries
-		// const today = new Date();
-		// //set time zone to IST
-		// const ISTOffset = 330; // IST offset UTC +5:30
-		// today.setMinutes(today.getMinutes() + ISTOffset);
+		// const dateObj = today();
 		// await Train.deleteMany({
-		// 	date: { $lt: today.toISOString().slice(0, 10) },
+		// 	date: { $lt: dateObj.toISOString().slice(0, 10) },
 		// });
 
 		const trains = await Train.find({

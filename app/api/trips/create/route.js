@@ -4,6 +4,7 @@ import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import checkUser from "@/app/utils/checkUser";
+import { today } from "@/app/utils/date";
 
 export async function POST(req) {
 	try {
@@ -46,13 +47,7 @@ export async function POST(req) {
 		}
 
 		const inputDate = new Date(date);
-		const today = new Date();
-		//set time zone to IST
-		const ISTOffset = 330; // IST offset UTC +5:30
-		today.setMinutes(today.getMinutes() + ISTOffset);
-		// get only yyyy-mm-dd part of date
-		const dateObj = new Date(today.toISOString().slice(0, 10));
-		// check if date is in the future
+		const dateObj = today();
 		if (inputDate < dateObj) {
 			throw new Error("Please enter a future date!");
 		}
