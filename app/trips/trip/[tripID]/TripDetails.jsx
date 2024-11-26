@@ -11,10 +11,15 @@ const TripDetails = ({ tripID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
+		if (!localStorage.getItem("travelbuddy")) {
+			router.push("/register");
+			return;
+		}
 		const res = await fetch("/api/trips/find", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 			body: JSON.stringify({ tripID }),
 		});
@@ -60,13 +65,14 @@ const TripDetails = ({ tripID }) => {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 			body: JSON.stringify({ tripID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
 			alert(json.message);
-			router.push("/trips");
+			router.push("/trips/my-trips");
 		} else {
 			const json = await res.json();
 			alert(json.message);

@@ -3,24 +3,13 @@ import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import checkUser from "@/app/utils/checkUser";
+import { checkAuth } from "@/app/utils/auth";
 import User from "@/app/models/User";
 import { today } from "@/app/utils/date";
 
 export async function GET() {
 	try {
-		const user = await checkUser({ verify: true });
-
-		if (!user) {
-			NextResponse.json(
-				{
-					message: "Invalid User!",
-				},
-				{
-					status: 404,
-				}
-			);
-		}
+		const email = await checkAuth();
 
 		await connectToDatabase(); // redundant but okay
 
@@ -31,7 +20,7 @@ export async function GET() {
 		// });
 
 		const trips = await Trip.find({
-			email: user.email,
+			email: email,
 		});
 
 		return NextResponse.json(
@@ -60,18 +49,7 @@ export async function GET() {
 
 export async function POST(req) {
 	try {
-		const user = await checkUser({ verify: true });
-
-		if (!user) {
-			NextResponse.json(
-				{
-					message: "Invalid User!",
-				},
-				{
-					status: 404,
-				}
-			);
-		}
+		const email = await checkAuth();
 
 		req = await req.json();
 
@@ -111,7 +89,7 @@ export async function POST(req) {
 			);
 		}
 
-		if (trip.email !== user.email) {
+		if (trip.email !== email) {
 			return NextResponse.json(
 				{
 					message: "You are not authorized to see this trip!",
@@ -184,6 +162,10 @@ export async function POST(req) {
 				} else return trip;
 			})
 		);
+
+		const user = await User.findOne({
+			email: email,
+		});
 
 		return NextResponse.json(
 			{

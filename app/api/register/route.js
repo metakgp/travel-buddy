@@ -2,12 +2,52 @@ import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import { checkCookie } from "@/app/utils/checkUser";
 import User from "@/app/models/User";
+import { cookies } from "next/headers";
+import Axios from "axios";
+import { checkUser } from "@/app/utils/auth";
 
 export async function POST(req) {
 	try {
-		const email = await checkCookie({ verify: true });
+		const cookieStore = cookies();
+
+		const cookie = cookieStore.get("heimdall");
+		if (!cookie) {
+			return NextResponse.json(
+				{
+					message: "You need to be logged in to register!",
+				},
+				{
+					status: 403,
+				}
+			);
+		}
+
+		const token = cookie.value;
+		if (!token) {
+			return NextResponse.json(
+				{
+					message: "You need to be logged in to register!",
+				},
+				{
+					status: 403,
+				}
+			);
+		}
+
+		const response = await Axios.get(
+			"https://heimdall-api.metakgp.org/validate-jwt",
+			{
+				headers: {
+					Cookie: Object.entries({
+						heimdall: token,
+					})
+						.map(([key, value]) => `${key}=${value}`)
+						.join("; "),
+				},
+			}
+		);
+		const email = response.data.email;
 
 		if (!email) {
 			return NextResponse.json(
@@ -64,6 +104,7 @@ export async function POST(req) {
 		return NextResponse.json(
 			{
 				message: "Registration successful!",
+				user: await checkUser({ email }),
 			},
 			{
 				status: 200,

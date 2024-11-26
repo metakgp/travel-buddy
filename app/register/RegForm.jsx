@@ -1,19 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
+import { checkUser } from "@/app/utils/auth";
 
 export default function RegForm({ email }) {
+	const router = useRouter();
+	const [loading, setLoading] = useState(true);
+
+	const check = async () => {
+		if (localStorage.getItem("travelbuddy")) {
+			router.push("/");
+			return;
+		}
+
+		const user = await checkUser({ email });
+		if (user) {
+			localStorage.setItem("travelbuddy", user);
+			router.push("/");
+			return;
+		}
+
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		check();
+	}, []);
+
 	const [formData, setFormData] = useState({
 		name: "",
 		roll: "",
 		number: "",
 	});
-
-	const [loading, setLoading] = useState(false);
-
-	const router = useRouter();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -54,6 +74,7 @@ export default function RegForm({ email }) {
 		if (res.ok) {
 			const json = await res.json();
 			alert(json.message);
+			localStorage.setItem("travelbuddy", json.user);
 			router.push("/");
 		} else {
 			const json = await res.json();

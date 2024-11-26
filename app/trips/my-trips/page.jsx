@@ -1,5 +1,3 @@
-import checkUser from "@/app/utils/checkUser";
-import { redirect } from "next/navigation";
 import MyTrips from "./MyTrips";
 
 export const metadata = {
@@ -7,12 +5,6 @@ export const metadata = {
 };
 
 const Page = async () => {
-	const user = await checkUser({ verify: false });
-
-	if (!user) {
-		redirect("/register");
-	}
-
 	return <MyTrips />;
 };
 

@@ -6,14 +6,20 @@ import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 
 const MyTrains = () => {
-	const [myTrains, setMyTrains] = useState(null);
 	const router = useRouter();
 
+	const [myTrains, setMyTrains] = useState(null);
+
 	const getDetails = async () => {
+		if (!localStorage.getItem("travelbuddy")) {
+			router.push("/register");
+			return;
+		}
 		const res = await fetch("/api/trains/find", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 		});
 		if (res.ok) {

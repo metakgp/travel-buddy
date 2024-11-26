@@ -1,23 +1,46 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import data from "@/app/data.json";
+import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
 import { today } from "@/app/utils/date";
+import { verifyUser } from "@/app/utils/auth";
+import data from "@/app/data.json";
 
-const TripForm = ({ email }) => {
+const TripForm = () => {
+	const router = useRouter();
+	const [loading, setLoading] = useState(true);
+
+	const [email, setEmail] = useState("");
+
+	const check = async () => {
+		if (!localStorage.getItem("travelbuddy")) {
+			router.push("/register");
+			return;
+		}
+		const token = localStorage.getItem("travelbuddy");
+		const email = await verifyUser({ token });
+		if (!email) {
+			localStorage.removeItem("travelbuddy");
+			router.push("/register");
+			return;
+		}
+		setEmail(email);
+
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		check();
+	}, []);
+
 	const [formData, setFormData] = useState({
 		date: "",
 		time: "",
 		source: "",
 		destination: "",
 	});
-
-	const [loading, setLoading] = useState(false);
-
-	const router = useRouter();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -51,6 +74,7 @@ const TripForm = ({ email }) => {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 			body: JSON.stringify(formData),
 		});

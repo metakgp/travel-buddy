@@ -1,24 +1,34 @@
 import { redirect } from "next/navigation";
-import checkUser, { checkCookie } from "@/app/utils/checkUser";
 import RegForm from "./RegForm";
+import { cookies } from "next/headers";
 
 export const metadata = {
 	title: "Register",
 };
 
 const Page = async () => {
-	const email = await checkCookie({ verify: false });
+	const cookieStore = cookies();
+	const cookie = cookieStore.get("heimdall");
 
-	if (!email) {
+	if (!cookie) {
 		redirect(
 			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
 		);
 	}
 
-	const user = await checkUser({ verify: false });
+	const token = cookie.value;
+	if (!token) {
+		redirect(
+			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
+		);
+	}
 
-	if (user) {
-		redirect("/");
+	const email = JSON.parse(atob(token.split(".")[1])).email; // get the user email from jwt
+
+	if (!email) {
+		redirect(
+			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
+		);
 	}
 
 	return <RegForm email={email} />;

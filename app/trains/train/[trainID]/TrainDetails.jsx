@@ -11,10 +11,15 @@ const TrainDetails = ({ trainID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
+		if (!localStorage.getItem("travelbuddy")) {
+			router.push("/register");
+			return;
+		}
 		const res = await fetch("/api/trains/find", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 			body: JSON.stringify({ trainID }),
 		});
@@ -60,13 +65,14 @@ const TrainDetails = ({ trainID }) => {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
 			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
 			alert(json.message);
-			router.push("/trains");
+			router.push("/trains/my-trains");
 		} else {
 			const json = await res.json();
 			alert(json.message);

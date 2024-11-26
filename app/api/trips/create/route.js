@@ -3,23 +3,12 @@ import { NextResponse } from "next/server";
 import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
-import checkUser from "@/app/utils/checkUser";
+import { checkAuth } from "@/app/utils/auth";
 import { today } from "@/app/utils/date";
 
 export async function POST(req) {
 	try {
-		const user = await checkUser({ verify: true });
-
-		if (!user) {
-			NextResponse.json(
-				{
-					message: "Invalid User!",
-				},
-				{
-					status: 404,
-				}
-			);
-		}
+		const email = await checkAuth();
 
 		req = await req.json();
 
@@ -72,7 +61,7 @@ export async function POST(req) {
 		}
 
 		const newTrip = new Trip({
-			email: user.email,
+			email: email,
 			date: date,
 			time: time,
 			source: source,
