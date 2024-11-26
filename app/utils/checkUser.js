@@ -35,7 +35,7 @@ export async function checkCookie({ verify }) {
 		}
 
 		var email;
-		if (verify) {
+		if (false) {
 			const response = await Axios.get(
 				"https://heimdall-api.metakgp.org/validate-jwt",
 				{
