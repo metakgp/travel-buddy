@@ -21,6 +21,15 @@ const Home = () => {
 					visible to others who input a similiar time slot. Please
 					consider before submitting any personal information.
 				</p>
+				<h4 className="mt-8">
+					Contribute to the project{" "}
+					<a
+						href="https://github.com/metakgp/travel-buddy"
+						target="_blank"
+					>
+						here
+					</a>
+				</h4>
 			</footer>
 		</div>
 	);
