@@ -138,13 +138,13 @@ const TripDetails = ({ tripID }) => {
 						<p>
 							<strong>Mobile Number:</strong> {trip.number}
 							<button
-								onClick={() => handleCall(data.trip.number)}
+								onClick={() => handleCall(trip.number)}
 								className="ml-2 bg-blue-500 text-white p-1 px-2 rounded"
 							>
 								Call
 							</button>
 							<button
-								onClick={() => handleWhatsApp(data.trip.number)}
+								onClick={() => handleWhatsApp(trip.number)}
 								className="ml-2 bg-green-500 text-white p-1 px-2 rounded"
 							>
 								WhatsApp

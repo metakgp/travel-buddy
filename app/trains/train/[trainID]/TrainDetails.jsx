@@ -133,15 +133,13 @@ const TrainDetails = ({ trainID }) => {
 						<p>
 							<strong>Mobile Number:</strong> {train.number}
 							<button
-								onClick={() => handleCall(data.train.number)}
+								onClick={() => handleCall(train.number)}
 								className="ml-2 bg-blue-500 text-white p-1 px-2 rounded"
 							>
 								Call
 							</button>
 							<button
-								onClick={() =>
-									handleWhatsApp(data.train.number)
-								}
+								onClick={() => handleWhatsApp(train.number)}
 								className="ml-2 bg-green-500 text-white p-1 px-2 rounded"
 							>
 								WhatsApp
