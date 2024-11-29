@@ -88,6 +88,12 @@ To set up Travel Buddy locally, follow these steps:
         MONGODB_URI=your_mongodb_connection_string
         ```
 
+    - Add your JWT secret key:
+
+        ```env
+        JWT_SECRET=your_jwt_secret_key
+        ```
+
 4. Run the application:
     ```sh
     npm run dev
