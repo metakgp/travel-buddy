@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Home = () => {
 	return (
-		<div className="container text-center mt-5">
+		<div className="text-center mt-5">
 			<h1 className="mb-4">Welcome to Travel Buddy</h1>
 			<h3>Find your travel partners for your next trip or train ride</h3>
 			<br />
