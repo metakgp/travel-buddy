@@ -16,14 +16,14 @@ const Page = () => {
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
-				<Link href="/trips/create" className="btn btn-primary btn-lg">
+				<Link href="/trips/create" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center">
 					Enter New Trip Details
 				</Link>
-				<Link href="/trips/my-trips" className="btn btn-primary btn-lg">
+				<Link href="/trips/my-trips" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center">
 					My Current Trips
 				</Link>
 			</div>
-			<Link href="/" className="btn btn-secondary btn-lg">
+			<Link href="/" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center">
 				Back to Home
 			</Link>
 			<footer className="mt-5">
