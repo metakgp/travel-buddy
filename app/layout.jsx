@@ -1,6 +1,8 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export const metadata = {
 	title: {
@@ -36,9 +38,11 @@ export default function RootLayout({ children }) {
 			<head>
 				<GoogleAnalytics gaId="G-Y0Z1ZF5667" />
 			</head>
-			<body>
-				<div className="flex items-center justify-center min-h-screen bg-gray-100">
-					{children}
+			<body className="bg-gray-100 h-full">
+				<div className="min-h-screen flex flex-col">
+					<Navbar />
+					<main className="flex-grow">{children}</main>
+					<Footer />
 				</div>
 			</body>
 		</html>
