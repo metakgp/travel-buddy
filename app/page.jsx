@@ -25,7 +25,12 @@ const Home = () => {
 					visible to others who input a similiar time slot. Please
 					consider before submitting any personal information.
 				</p>
-				<h4 className="mt-8">
+				<Link href="https://github.com/metakgp/travel-buddy" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500">
+					<div className="gap-2 flex flex-row">
+						<span> Contribute to the project </span>
+					</div>
+				</Link>
+				{/* <h4 className="mt-8">
 					Contribute to the project{" "}
 					<a
 						href="https://github.com/metakgp/travel-buddy"
@@ -33,7 +38,7 @@ const Home = () => {
 					>
 						here
 					</a>
-				</h4>
+				</h4> */}
 			</footer>
 		</div>
 	);
