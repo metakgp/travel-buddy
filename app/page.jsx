@@ -10,12 +10,12 @@ const Home = () => {
 			<Link href="/trips" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500"
 				><div className="gap-2 flex flex-row">
 				<img src='/assets/trips.png' alt="Trip Icon" className="w-8 h-8" />
-				<span> Trips </span></div>
+				<span> Track My Trips </span></div>
 				</Link>
 				<Link href="/trains" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500"
 				><div className="gap-2 flex flex-row">
 				<img src='/assets/train.png' alt="Trip Icon" className="w-8 h-8" />
-				<span> Trains </span></div>
+				<span> Train Trails </span></div>
 				</Link>
 			</div>
 			<footer className="mt-5">
