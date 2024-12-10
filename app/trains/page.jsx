@@ -6,8 +6,8 @@ export const metadata = {
 
 const Page = () => {
 	return (
-		<div className="container text-center mt-5">
-			<h1 className="mb-4">Welcome to Travel Buddy</h1>
+		<div className="bg-gradient-to-br  from-sky-300 to-slate-300 min-h-screen w-full text-center">
+			<h1 className="mb-4 mt-7">Welcome to Travel Buddy</h1>
 			<h3>Find your travel partners for your next train ride</h3>
 			<br />
 			<h6>
@@ -20,18 +20,21 @@ const Page = () => {
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
-				<Link href="/trains/create" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+				<Link href="/trains/create" className="btn btn-lg text-white bg-gradient-to-br hover:shadow-xl hover:shadow-slate-800 
+				 from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 				>
 					Enter New Train Details
 				</Link>
 				<Link
 					href="/trains/my-trains"
-					className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+					className="btn btn-lg text-white bg-gradient-to-br hover:shadow-xl hover:shadow-slate-800 
+					 from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 				>
 					My Current Train Trips
 				</Link>
 			</div>
-			<Link href="/" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+			<Link href="/" className="btn btn-lg text-white bg-gradient-to-br hover:shadow-xl hover:shadow-slate-800 
+			 from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 			>
 				Back to Home
 			</Link>
