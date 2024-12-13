@@ -16,7 +16,7 @@ const Home = () => {
 				<Link href="/trains" className="btn btn-lg text-white bg-gradient-to-br from-[#D2691E] to-[#8e5337] hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500"
 				><div className="gap-2 flex flex-row">
 				<img src='/assets/train.png' alt="Trip Icon" className="w-8 h-8" />
-				<span> Trains </span></div>
+				<span> Train </span></div>
 				</Link>
 			</div>
 			<footer className="mt-5">
