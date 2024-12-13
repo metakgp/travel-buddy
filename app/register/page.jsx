@@ -11,24 +11,18 @@ const Page = async () => {
 	const cookie = cookieStore.get("heimdall");
 
 	if (!cookie) {
-		redirect(
-			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-		);
+		redirect("/authenticate");
 	}
 
 	const token = cookie.value;
 	if (!token) {
-		redirect(
-			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-		);
+		redirect("/authenticate");
 	}
 
 	const email = JSON.parse(atob(token.split(".")[1])).email; // get the user email from jwt
 
 	if (!email) {
-		redirect(
-			"https://heimdall.metakgp.org/?redirect_url=https://travel.metakgp.org/"
-		);
+		redirect("/authenticate");
 	}
 
 	return <RegForm email={email} />;
