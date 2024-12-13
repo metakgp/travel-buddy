@@ -6,6 +6,7 @@ export const metadata = {
 
 const Page = () => {
 	return (
+		<div className="min-h-screen w-full  bg-[#eec5a9]">
 		<div className="container text-center mt-5">
 			<h1 className="mb-4">Welcome to Travel Buddy</h1>
 			<h3>Find your travel partners for your next trip</h3>
@@ -16,16 +17,16 @@ const Page = () => {
 			</h6>
 			<br />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
-				<Link href="/trips/create" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+				<Link href="/trips/create" className="btn btn-lg text-white bg-gradient-to-br  from-[#D2691E] to-[#8e5337]  hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 				>
 					Enter New Trip Details
 				</Link>
-				<Link href="/trips/my-trips" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+				<Link href="/trips/my-trips" className="btn btn-lg text-white bg-gradient-to-br from-[#D2691E] to-[#8e5337] hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 				>
 					My Current Trips
 				</Link>
 			</div>
-			<Link href="/" className="btn btn-lg text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
+			<Link href="/" className="btn btn-lg text-white bg-gradient-to-br from-[#D2691E] to-[#8e5337] hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-full text-sm px-4 py-2 text-center transition-all duration-500"
 			>
 				Back to Home
 			</Link>
@@ -46,7 +47,7 @@ const Page = () => {
 					</a>
 				</h4>
 			</footer>
-		</div>
+		</div></div>
 	);
 };
 
