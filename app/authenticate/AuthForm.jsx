@@ -1,11 +1,12 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Loading from "../utils/Loading";
+import { useRouter } from "next/navigation";
 
 export default function AuthForm() {
     const [institutes, setInstitutes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     const getInstitutes = async () => {
         const res = await fetch("/api/institute/getall", {
@@ -57,8 +58,8 @@ export default function AuthForm() {
         setLoading(false);
         if (res.ok) {
             const { institute } = await res.json();
-            // redirect
-            window.location.href = `${institute.authLink}?redirect_url=https://travel.metakgp.org/`;
+            // Passing institute as query parameter and redirect to register
+            router.push(`/register?authLink=${institute.authLink}&authCookie=${institute.authCookie}&verifyAuthLink=${institute.verifyAuthLink}`);
         } else {
             const json = await res.json();
             alert(json.message);

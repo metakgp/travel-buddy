@@ -12,7 +12,7 @@ const TripDetails = ({ tripID }) => {
 
 	const getDetails = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/register");
+			router.push("/authenticate");
 			return;
 		}
 		const res = await fetch("/api/trips/find", {

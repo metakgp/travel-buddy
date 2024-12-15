@@ -9,9 +9,22 @@ import { checkUser } from "@/app/utils/auth";
 
 export async function POST(req) {
 	try {
+
+		req = await req.json();
+
+		// Form fields:
+		// i)	name – (Full Name) - Text
+		// ii)	roll – (Roll Number) – Text
+		// iii)	number – (Mobile Number) – Text
+		// iv)	email – (Institute Email) – Text
+		// v)   verifyAuthLink - (Institute verifyAuthLink) – Text
+		// vi)  authCookie - (Institute AuthCookie) - Text
+
+		let { name, roll, number, verifyAuthLink, authCookie } = req;
+
 		const cookieStore = cookies();
 
-		const cookie = cookieStore.get("heimdall");
+		const cookie = cookieStore.get(`${authCookie}`);
 		if (!cookie) {
 			return NextResponse.json(
 				{
@@ -36,11 +49,11 @@ export async function POST(req) {
 		}
 
 		const response = await Axios.get(
-			"https://heimdall-api.metakgp.org/validate-jwt",
+			`${verifyAuthLink}`,
 			{
 				headers: {
 					Cookie: Object.entries({
-						heimdall: token,
+						[authCookie]: token,
 					})
 						.map(([key, value]) => `${key}=${value}`)
 						.join("; "),
@@ -59,16 +72,6 @@ export async function POST(req) {
 				}
 			);
 		}
-
-		req = await req.json();
-
-		// Form fields:
-		// i)	name – (Full Name) - Text
-		// ii)	roll – (Roll Number) – Text
-		// iii)	number – (Mobile Number) – Text
-		// iv)	email – (Institute Email) – Text
-
-		let { name, roll, number } = req;
 
 		name = sanitize(name).trim();
 		roll = sanitize(roll).trim();

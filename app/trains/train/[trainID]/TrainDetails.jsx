@@ -12,7 +12,7 @@ const TrainDetails = ({ trainID }) => {
 
 	const getDetails = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/register");
+			router.push("/authenticate");
 			return;
 		}
 		const res = await fetch("/api/trains/find", {

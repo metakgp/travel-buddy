@@ -7,6 +7,7 @@ import { Schema, model, models } from "mongoose";
 // iv) locations: (Institute Locations) - array of strings - required
 // v) authLink: (URL to Get Authentication Link) - string - required
 // vi) verifyAuthLink: (URL to Verify Authentication) - string - required
+// vii) authCookie: (Cookie for Authentication) - string - required
 
 const instituteSchema = new Schema({
 	name: {
@@ -39,6 +40,10 @@ const instituteSchema = new Schema({
         type: String,
         required: [true, "Please provide the URL to verify authentication"],
     },
+	authCookie: {
+		type: String,
+        required: [true, "Please provide the name of cookie"],
+	}
 });
 
 
