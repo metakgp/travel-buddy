@@ -15,14 +15,14 @@ const TrainForm = () => {
 
 	const check = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/register");
+			router.push("/authenticate");
 			return;
 		}
 		const token = localStorage.getItem("travelbuddy");
 		const email = await verifyUser({ token });
 		if (!email) {
 			localStorage.removeItem("travelbuddy");
-			router.push("/register");
+			router.push("/authenticate");
 			return;
 		}
 		setEmail(email);

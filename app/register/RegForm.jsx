@@ -5,9 +5,15 @@ import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
 import { checkUser } from "@/app/utils/auth";
 
-export default function RegForm({ email }) {
+export default function RegForm({ email, instituteCode }) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
+	const [formData, setFormData] = useState({
+		name: "",
+		roll: "",
+		number: "",
+		instituteCode: instituteCode
+	});
 
 	const check = async () => {
 		if (localStorage.getItem("travelbuddy")) {
@@ -29,11 +35,6 @@ export default function RegForm({ email }) {
 		check();
 	}, []);
 
-	const [formData, setFormData] = useState({
-		name: "",
-		roll: "",
-		number: "",
-	});
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;

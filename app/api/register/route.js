@@ -6,12 +6,29 @@ import User from "@/app/models/User";
 import { cookies } from "next/headers";
 import Axios from "axios";
 import { checkUser } from "@/app/utils/auth";
+import { instituteDetails } from "@/app/utils/institute";
 
 export async function POST(req) {
 	try {
+
+		req = await req.json();
+
+		// Form fields:
+		// i)	name – (Full Name) - Text
+		// ii)	roll – (Roll Number) – Text
+		// iii)	number – (Mobile Number) – Text
+		// iv)	email – (Institute Email) – Text
+		// v)   instituteCode - (Institute Code) – Text
+
+		let { name, roll, number, instituteCode } = req;
+
+		const institute = await instituteDetails({ instituteCode });
+
+		let { authCookie, verifyAuthLink } = institute;
+
 		const cookieStore = cookies();
 
-		const cookie = cookieStore.get("heimdall");
+		const cookie = cookieStore.get(`${authCookie}`);
 		if (!cookie) {
 			return NextResponse.json(
 				{
@@ -36,11 +53,11 @@ export async function POST(req) {
 		}
 
 		const response = await Axios.get(
-			"https://heimdall-api.metakgp.org/validate-jwt",
+			`${verifyAuthLink}`,
 			{
 				headers: {
 					Cookie: Object.entries({
-						heimdall: token,
+						[authCookie]: token,
 					})
 						.map(([key, value]) => `${key}=${value}`)
 						.join("; "),
@@ -60,24 +77,16 @@ export async function POST(req) {
 			);
 		}
 
-		req = await req.json();
-
-		// Form fields:
-		// i)	name – (Full Name) - Text
-		// ii)	roll – (Roll Number) – Text
-		// iii)	number – (Mobile Number) – Text
-		// iv)	email – (Institute Email) – Text
-
-		let { name, roll, number } = req;
-
 		name = sanitize(name).trim();
 		roll = sanitize(roll).trim();
 		number = sanitize(number).trim();
+		instituteCode = sanitize(instituteCode).trim();
 
 		if (
 			validator.isEmpty(name) ||
 			validator.isEmpty(roll) ||
-			validator.isEmpty(number)
+			validator.isEmpty(number) ||
+			validator.isEmpty(instituteCode)
 		) {
 			throw new Error("Please fill all the fields!");
 		}
@@ -97,6 +106,7 @@ export async function POST(req) {
 			roll: roll,
 			number: number,
 			email: email,
+			instituteCode: instituteCode
 		});
 
 		await newUser.save();
