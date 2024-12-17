@@ -10,7 +10,6 @@ import { instituteDetails } from "@/app/utils/institute";
 
 export async function POST(req) {
 	try {
-
 		req = await req.json();
 
 		// Form fields:
@@ -28,7 +27,7 @@ export async function POST(req) {
 
 		const cookieStore = cookies();
 
-		const cookie = cookieStore.get(`${authCookie}`);
+		const cookie = cookieStore.get(authCookie);
 		if (!cookie) {
 			return NextResponse.json(
 				{
@@ -52,18 +51,15 @@ export async function POST(req) {
 			);
 		}
 
-		const response = await Axios.get(
-			`${verifyAuthLink}`,
-			{
-				headers: {
-					Cookie: Object.entries({
-						[authCookie]: token,
-					})
-						.map(([key, value]) => `${key}=${value}`)
-						.join("; "),
-				},
-			}
-		);
+		const response = await Axios.get(verifyAuthLink, {
+			headers: {
+				Cookie: Object.entries({
+					[authCookie]: token,
+				})
+					.map(([key, value]) => `${key}=${value}`)
+					.join("; "),
+			},
+		});
 		const email = response.data.email;
 
 		if (!email) {
@@ -106,7 +102,7 @@ export async function POST(req) {
 			roll: roll,
 			number: number,
 			email: email,
-			instituteCode: instituteCode
+			instituteCode: instituteCode,
 		});
 
 		await newUser.save();
