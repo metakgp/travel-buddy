@@ -14,7 +14,7 @@ export default function Error({ error }) {
                 {error.message || "An unexpected error occurred."}
             </p>
             <Link
-                href="/"
+                href="/authenticate"
                 className="btn btn-lg text-white bg-gradient-to-br from-[#D2691E] to-[#8e5337] hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-yellow-500 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500"
             >
                 Try Again

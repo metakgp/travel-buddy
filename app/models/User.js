@@ -5,6 +5,7 @@ import { Schema, model, models } from "mongoose";
 // ii)	roll – (Roll Number) – Text
 // iii)	number – (Mobile Number) – Text
 // iv)	email – (Institute Email) – Text
+// v)	instituteCode – (Institute Code) – Text
 
 const userSchema = new Schema({
 	name: {
@@ -24,6 +25,11 @@ const userSchema = new Schema({
 		required: [true, "Please provide an email"],
 		unique: true,
 	},
+	instituteCode: {
+		type: String,
+		required: [true, "Please provide an institute code"],
+		ref: 'Institute'
+	}
 });
 
 const User = models.User || model("User", userSchema);

@@ -80,11 +80,13 @@ export async function POST(req) {
 		name = sanitize(name).trim();
 		roll = sanitize(roll).trim();
 		number = sanitize(number).trim();
+		instituteCode = sanitize(instituteCode).trim();
 
 		if (
 			validator.isEmpty(name) ||
 			validator.isEmpty(roll) ||
-			validator.isEmpty(number)
+			validator.isEmpty(number) ||
+			validator.isEmpty(instituteCode)
 		) {
 			throw new Error("Please fill all the fields!");
 		}
@@ -104,6 +106,7 @@ export async function POST(req) {
 			roll: roll,
 			number: number,
 			email: email,
+			instituteCode: instituteCode
 		});
 
 		await newUser.save();
