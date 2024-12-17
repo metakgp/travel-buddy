@@ -6,6 +6,7 @@ import User from "@/app/models/User";
 import { cookies } from "next/headers";
 import Axios from "axios";
 import { checkUser } from "@/app/utils/auth";
+import { instituteDetails } from "@/app/utils/institute";
 
 export async function POST(req) {
 	try {
@@ -17,10 +18,13 @@ export async function POST(req) {
 		// ii)	roll – (Roll Number) – Text
 		// iii)	number – (Mobile Number) – Text
 		// iv)	email – (Institute Email) – Text
-		// v)   verifyAuthLink - (Institute verifyAuthLink) – Text
-		// vi)  authCookie - (Institute AuthCookie) - Text
+		// v)   instituteCode - (Institute Code) – Text
 
-		let { name, roll, number, verifyAuthLink, authCookie } = req;
+		let { name, roll, number, instituteCode } = req;
+
+		const institute = await instituteDetails({ instituteCode });
+
+		let { authCookie, verifyAuthLink } = institute;
 
 		const cookieStore = cookies();
 

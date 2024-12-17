@@ -8,6 +8,13 @@ export default function AuthForm() {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
+    const check = async () => {
+		if (localStorage.getItem("travelbuddy")) {
+			router.push("/");
+			return;
+		}
+	};
+
     const getInstitutes = async () => {
         const res = await fetch("/api/institute/getall", {
             method: "GET",
@@ -26,6 +33,7 @@ export default function AuthForm() {
     };
 
     useEffect(() => {
+        check();
         getInstitutes();
     }, []);
 
@@ -47,23 +55,8 @@ export default function AuthForm() {
             alert("Please select an institute");
             return;
         }
-        setLoading(true);
-        const res = await fetch("/api/authenticate", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
-        setLoading(false);
-        if (res.ok) {
-            const { institute } = await res.json();
-            // Passing institute as query parameter and redirect to register
-            router.push(`/register?authLink=${institute.authLink}&authCookie=${institute.authCookie}&verifyAuthLink=${institute.verifyAuthLink}`);
-        } else {
-            const json = await res.json();
-            alert(json.message);
-        }
+        router.push(`/register?instituteCode=${formData.selectedInstituteCode}`);
+        return;
     }
 
     return loading ? (

@@ -1,13 +1,19 @@
 import { redirect } from "next/navigation";
 import RegForm from "./RegForm";
 import { cookies } from "next/headers";
+import { instituteDetails } from "../utils/institute";
 
 export const metadata = {
 	title: "Register",
 };
 
 const Page = async ({ searchParams }) => {
-	const { authCookie, authLink, verifyAuthLink } = searchParams;
+	const { instituteCode } = searchParams;
+
+	const institute = await instituteDetails({ instituteCode });
+
+	const { authCookie, authLink } = institute;
+
 	const cookieStore = cookies();
 	const cookie = cookieStore.get(`${authCookie}`);
 
@@ -32,7 +38,7 @@ const Page = async ({ searchParams }) => {
 		);
 	}
 
-	return <RegForm email={email} verifyAuthLink={verifyAuthLink} authCookie={authCookie} />;
+	return <RegForm email={email} instituteCode={instituteCode} />;
 };
 
 export default Page;

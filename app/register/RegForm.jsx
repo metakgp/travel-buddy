@@ -5,15 +5,14 @@ import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
 import { checkUser } from "@/app/utils/auth";
 
-export default function RegForm({ email, authCookie, verifyAuthLink }) {
+export default function RegForm({ email, instituteCode }) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [formData, setFormData] = useState({
 		name: "",
 		roll: "",
 		number: "",
-		verifyAuthLink: verifyAuthLink,
-		authCookie: authCookie
+		instituteCode: instituteCode
 	});
 
 	const check = async () => {
