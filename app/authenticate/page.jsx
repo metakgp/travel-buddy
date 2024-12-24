@@ -11,8 +11,10 @@ const Page = async () => {
 
 	// Return only names of Institues
 	const institutes = await Institute.find({}, { _id: 0, name: 1, code: 1 });
+	
+	const institutesData = JSON.parse(JSON.stringify(institutes));
 
-	return <AuthForm institutes={institutes} />;
+	return <AuthForm institutes={institutesData} />;
 };
 
 export default Page;

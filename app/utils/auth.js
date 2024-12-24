@@ -4,6 +4,7 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import jwt from "jsonwebtoken";
 import { headers } from "next/headers";
+import { instituteDetails } from "./institute";
 
 export async function checkUser({ email }) {
 	if (!email || email === "") {
@@ -47,5 +48,17 @@ export async function checkAuth() {
 		throw new Error("Unauthorized!");
 	}
 
+	return email;
+}
+
+export async function verifyUserMail({ instituteCode, email }) {
+	const institute = await instituteDetails({ instituteCode });
+
+	const emailDomain = email.split("@")[1];
+
+	if (emailDomain != institute.domain) {
+		throw new Error("Error during email domain validation.");
+	}
+	
 	return email;
 }
