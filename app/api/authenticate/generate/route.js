@@ -19,7 +19,7 @@ export async function POST(req) {
 
         const data = `${instituteCode}.${email}.${otp}`;
 
-        const hashData = HmacSHA256(JSON.stringify(data), process.env.HASH_SECRET).toString() + "." + expiryTime;
+        const hashData = HmacSHA256(data, process.env.HASH_SECRET).toString() + "." + expiryTime;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
