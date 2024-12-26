@@ -2,24 +2,18 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
-export async function GET() {
+export async function GET(req) {
     try {
-
+        
         const cookieStore = cookies();
-
+        
         const authCookie = req.headers.get("Cookie");
 
         if (!authCookie) {
             throw new Error("No cookies found in the request.");
         }
 
-        const [authCookiePair] = authCookie.split("; ");
-
-        if (!authCookiePair) {
-            throw new Error("Invalid cookie format.");
-        }
-
-        const [authCookieName, token] = authCookiePair.split("=");
+        const [authCookieName, token] = authCookie.split("=");
 
         if (!authCookieName || !token) {
             throw new Error("Authentication cookie not found.");

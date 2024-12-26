@@ -20,7 +20,6 @@ export async function POST(req) {
 		// v)   instituteCode - (Institute Code) – Text
 
 		let { name, roll, number, instituteCode } = req;
-
 		const institute = await instituteDetails({ instituteCode });
 
 		let { authCookie, verifyAuthLink } = institute;
@@ -50,7 +49,6 @@ export async function POST(req) {
 				}
 			);
 		}
-
 		const response = await Axios.get(verifyAuthLink, {
 			headers: {
 				Cookie: Object.entries({

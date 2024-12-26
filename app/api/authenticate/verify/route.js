@@ -4,6 +4,13 @@ import { HmacSHA256 } from "crypto-js";
 import validator from "validator";
 import { cookies } from "next/headers";
 import { instituteDetails } from "@/app/utils/institute";
+import jwt from "jsonwebtoken";
+
+const createJwt = (payload) => {
+    const secret = process.env.JWT_SECRET;
+    const token = jwt.sign(payload, secret, { expiresIn: '1h' }); // Set expiration time
+    return token;
+};
 
 export async function POST(req) {
     try {
@@ -16,7 +23,7 @@ export async function POST(req) {
         // iv)  otp - (Submitted OTP) - Text
 
         const cookieStore = cookies();
-        
+
         const { email, hashData, instituteCode, otp } = req;
 
         if (
@@ -49,20 +56,24 @@ export async function POST(req) {
         const expiryTime = parseInt(hash[1]);
 
         const currentTime = Date.now();
-        
+
         if (currentTime > expiryTime) {
             cookieStore.delete("otpData");
             throw new Error("OTP has expired. Please request a new one.");
         }
-        
+
         const institute = await instituteDetails({ instituteCode });
+
+        const payload = { email };
+
+        const token = createJwt(payload);
 
         cookieStore.set({
             name: institute.authCookie,
-            value: JSON.stringify({ email }),
+            value: token,
             httpOnly: true,
             path: "/",
-            maxAge: 5 * 60, // Temporary maxAge
+            maxAge: 60 * 60, // Temporary maxAge
         });
 
         cookieStore.delete("otpData");
