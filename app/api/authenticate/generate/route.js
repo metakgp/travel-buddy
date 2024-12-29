@@ -3,6 +3,7 @@ import otpGenerator from "otp-generator";
 import { HmacSHA256 } from "crypto-js";
 import nodemailer from "nodemailer";
 import { cookies } from "next/headers";
+import { instituteDetails } from "@/app/utils/institute";
 
 export async function POST(req) {
     try {
@@ -12,6 +13,14 @@ export async function POST(req) {
         // i)	email – (Institute Email) – Text
 
         const { email, instituteCode } = req;
+
+        const institute = await instituteDetails({ instituteCode });
+
+        const emailDomain = email.split("@")[1];
+
+        if (emailDomain != institute.domain) {
+            throw new Error("Error during email domain validation.");
+        }
 
         const otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
 

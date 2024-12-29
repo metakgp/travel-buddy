@@ -1,22 +1,33 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { instituteDetails } from "@/app/utils/institute";
 
 export async function GET(req) {
     try {
         
-        const cookieStore = cookies();
-        
-        const authCookie = req.headers.get("Cookie");
+        const { searchParams } = new URL(req.url);
 
-        if (!authCookie) {
-            throw new Error("No cookies found in the request.");
+        const instituteCode = searchParams.get("instituteCode");
+
+        const institute = await instituteDetails({ instituteCode });
+
+        const { authCookie } = institute;
+        
+        const cookieStore = cookies();
+
+        const cookie = cookieStore.get(authCookie);
+
+        if (!cookie) {
+            throw new Error("No JWT cookie found in the request.");
         }
 
-        const [authCookieName, token] = authCookie.split("=");
+        const token = cookie.value;
 
-        if (!authCookieName || !token) {
-            throw new Error("Authentication cookie not found.");
+        console.log(token);
+
+        if (!token) {
+            throw new Error("No JWT session token found.");
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -25,14 +36,14 @@ export async function GET(req) {
         const currentTime = Date.now();
 
         if (currentTime >= expiryTime * 1000) {
-            cookieStore.delete("authCookieName");
-            throw new Error("Authentication token has expired.");
+            cookieStore.delete(cookie);
+            throw new Error("JWT cookie token has expired.");
         }
 
         return NextResponse.json(
             {
                 message: "Authentication successful.",
-                email: decoded.email, 
+                email: decoded.email,
             },
             {
                 status: 200,

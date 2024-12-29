@@ -38,7 +38,7 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
 
     if (res.ok) {
       const json = await res.json();
-      router.push("/");
+      router.push("/register?instituteCode=" + instituteCode);
     } else {
       const json = await res.json();
       alert(json.message);

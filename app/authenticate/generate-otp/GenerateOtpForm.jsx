@@ -1,6 +1,5 @@
 "use client";
 
-import { verifyUserMail } from "@/app/utils/auth";
 import Loading from "@/app/utils/Loading";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,10 +16,8 @@ const GenerateOtpForm = ({ instituteCode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const verifiedEmail = await verifyUserMail({ instituteCode, email });
-
     const data = {
-      email: verifiedEmail,
+      email: email,
       instituteCode: instituteCode
     }
 

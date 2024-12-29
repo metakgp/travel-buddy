@@ -49,7 +49,24 @@ export async function POST(req) {
 				}
 			);
 		}
-		const response = await Axios.get(verifyAuthLink, {
+
+		const isExternal = verifyAuthLink.startsWith("http://") || verifyAuthLink.startsWith("https://");
+
+		let verifyrouteURL;
+
+		if(isExternal){
+			verifyrouteURL = verifyAuthLink;
+		}
+
+		else{
+			verifyrouteURL = "https://travel.metakgp.org/" +  verifyAuthLink;
+		}
+
+		if(!verifyrouteURL || verifyrouteURL === ""){
+			throw new Error("Invalid authentication verfiy URL.")
+		}
+
+		const response = await Axios.get(verifyrouteURL, {
 			headers: {
 				Cookie: Object.entries({
 					[authCookie]: token,
@@ -58,6 +75,11 @@ export async function POST(req) {
 					.join("; "),
 			},
 		});
+
+		if (!response || !response.data || !response.data.email) {
+			throw new Error("No JWT session token found.");
+		}
+
 		const email = response.data.email;
 
 		if (!email) {
