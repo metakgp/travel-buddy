@@ -3,7 +3,7 @@ import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Axios from "axios";
 import { checkUser } from "@/app/utils/auth";
 import { instituteDetails } from "@/app/utils/institute";
@@ -11,7 +11,6 @@ import { instituteDetails } from "@/app/utils/institute";
 export async function POST(req) {
 	try {
 		req = await req.json();
-
 		// Form fields:
 		// i)	name – (Full Name) - Text
 		// ii)	roll – (Roll Number) – Text
@@ -54,16 +53,19 @@ export async function POST(req) {
 
 		let verifyrouteURL;
 
-		if(isExternal){
+		if (isExternal) {
 			verifyrouteURL = verifyAuthLink;
 		}
 
-		else{
-			verifyrouteURL = "https://travel.metakgp.org/" +  verifyAuthLink;
+		else {
+			const requestHeaders = headers();
+			const host = requestHeaders.get('host');
+			const protocol = requestHeaders.get('x-forwarded-proto') || 'http';
+			verifyrouteURL = protocol + "://" + host + verifyAuthLink;
 		}
 
-		if(!verifyrouteURL || verifyrouteURL === ""){
-			throw new Error("Invalid authentication verfiy URL.")
+		if (!verifyrouteURL || verifyrouteURL === "") {
+			throw new Error("Invalid authentication verfiy URL.");
 		}
 
 		const response = await Axios.get(verifyrouteURL, {

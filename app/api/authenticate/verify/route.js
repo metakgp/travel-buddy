@@ -88,6 +88,7 @@ export async function POST(req) {
         );
 
     } catch (error) {
+        console.log(error.message);
         return NextResponse.json(
             {
                 message:

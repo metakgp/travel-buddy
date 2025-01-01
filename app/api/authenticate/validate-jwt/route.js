@@ -24,8 +24,6 @@ export async function GET(req) {
 
         const token = cookie.value;
 
-        console.log(token);
-
         if (!token) {
             throw new Error("No JWT session token found.");
         }

@@ -1,13 +1,31 @@
 "use client";
 
-import Loading from "@/app/utils/Loading";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { instituteDetails } from "@/app/utils/institute";
 
 const GenerateOtpForm = ({ instituteCode }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [institute, setInstitute] = useState("");
   const router = useRouter();
+
+  const checkInstituteCode = async () => {
+    if (!instituteCode) {
+      alert('Institute not found.');
+      router.push("/authenticate");
+    }
+    const selectInstitute = await instituteDetails({ instituteCode });
+    if (!selectInstitute) {
+      alert('Institute not found.');
+      router.push("/authenticate");
+    }
+    setInstitute(selectInstitute.name);
+  }
+
+  useEffect(() => {
+    checkInstituteCode();
+  }, [])
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -35,16 +53,15 @@ const GenerateOtpForm = ({ instituteCode }) => {
 
     if (res.ok) {
       const json = await res.json();
-      router.push("/authenticate/verify-otp");
+      alert(json.message);
+      router.push("/authenticate/verify-otp");;
     } else {
       const json = await res.json();
       alert(json.message);
     }
   };
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
@@ -67,11 +84,27 @@ const GenerateOtpForm = ({ instituteCode }) => {
             className="border rounded-md p-2 w-full focus:ring focus:ring-blue-300"
           />
         </div>
+        {institute && (
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium">Institute</label>
+            <input
+              type="text"
+              name="institute"
+              value={institute}
+              disabled
+              className="border rounded-md p-2 w-full"
+            />
+          </div>
+        )}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+          disabled={loading}
+          className={`w-full p-2 rounded-md transition ${loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-500 text-white hover:bg-blue-600"
+            }`}
         >
-          Send OTP
+          {loading ? "Submitting..." : "Send OTP"}
         </button>
       </form>
     </div>

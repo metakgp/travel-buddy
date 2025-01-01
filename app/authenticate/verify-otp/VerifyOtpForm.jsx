@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Loading from "@/app/utils/Loading";
 
 const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
 
@@ -13,6 +12,17 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
   const handleChange = (e) => {
     setOtp(e.target.value);
   };
+
+  const check = () =>{
+    if (!hashData || !instituteCode || !email) {
+      alert("Invalid access. Redirecting to authentication page.");
+      router.push("/authenticate");
+    }
+  }
+
+  useEffect(()=>{
+    check();
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +48,7 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
 
     if (res.ok) {
       const json = await res.json();
+      alert(json.message);
       router.push("/register?instituteCode=" + instituteCode);
     } else {
       const json = await res.json();
@@ -46,9 +57,7 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
   };
 
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit}
@@ -72,9 +81,13 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+          disabled={loading}
+          className={`w-full p-2 rounded-md transition ${loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+            }`}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>

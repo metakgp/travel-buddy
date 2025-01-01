@@ -11,7 +11,6 @@ export async function instituteDetails({ instituteCode }) {
     const institute = await Institute.findOne({
         code: instituteCode
     });
-    // console.log(institute);
     if (!institute) {
         throw new Error("Institute not found.");
     }

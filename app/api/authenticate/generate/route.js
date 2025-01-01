@@ -59,7 +59,7 @@ export async function POST(req) {
 
         return NextResponse.json(
             {
-                message: "OTP send to mail successfully!",
+                message: "OTP sent successfully! Please check your inbox.",
             },
             {
                 status: 200,
