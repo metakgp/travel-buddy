@@ -31,8 +31,8 @@ COPY --from=base /app/.next ./.next
 COPY --from=base /app/public ./public
 COPY --from=base /app/node_modules ./node_modules
 
-# Step 11: Expose the port Next.js runs on
-EXPOSE 3000
+# Step 11: Copy metaploy stuff
+COPY metaploy/ ./
 
 # Step 12: Set the command to start the application
-CMD ["npm", "start"]
+CMD ["./postinstall.sh", "npm start"]
