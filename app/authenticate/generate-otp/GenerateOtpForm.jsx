@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { instituteDetails } from "@/app/utils/institute";
 
-const GenerateOtpForm = ({ instituteCode }) => {
+const GenerateOtpForm = ({ instituteCode, redirect_url }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [institute, setInstitute] = useState("");
@@ -13,14 +13,14 @@ const GenerateOtpForm = ({ instituteCode }) => {
   const checkInstituteCode = async () => {
     if (!instituteCode) {
       alert('Institute not found.');
-      router.push("/authenticate");
+      router.push("/");
     }
-    const selectInstitute = await instituteDetails({ instituteCode });
-    if (!selectInstitute) {
-      alert('Institute not found.');
-      router.push("/authenticate");
+    try {
+      const selectInstitute = await instituteDetails({ instituteCode });
+      setInstitute(selectInstitute.name);
+    } catch (error) {
+      router.push("/");
     }
-    setInstitute(selectInstitute.name);
   }
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const GenerateOtpForm = ({ instituteCode }) => {
     if (res.ok) {
       const json = await res.json();
       alert(json.message);
-      router.push("/authenticate/verify-otp");;
+      router.push("/authenticate/verify-otp?redirect_url=" + redirect_url);
     } else {
       const json = await res.json();
       alert(json.message);
@@ -104,7 +104,7 @@ const GenerateOtpForm = ({ instituteCode }) => {
             : "bg-blue-500 text-white hover:bg-blue-600"
             }`}
         >
-          {loading ? "Submitting..." : "Send OTP"}
+          {loading ? "Sending OTP..." : "Send OTP"}
         </button>
       </form>
     </div>

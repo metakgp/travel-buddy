@@ -5,7 +5,7 @@ import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
 import { checkUser } from "@/app/utils/auth";
 
-export default function RegForm({ email, instituteCode }) {
+export default function RegForm({ email, instituteCode, redirect_url }) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [formData, setFormData] = useState({
@@ -76,7 +76,7 @@ export default function RegForm({ email, instituteCode }) {
 			const json = await res.json();
 			alert(json.message);
 			localStorage.setItem("travelbuddy", json.user);
-			router.push("/");
+			router.push(redirect_url);
 		} else {
 			const json = await res.json();
 			alert(json.message);

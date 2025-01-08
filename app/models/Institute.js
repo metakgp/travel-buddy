@@ -23,14 +23,8 @@ const instituteSchema = new Schema({
 		required: [true, "Please provide a domain for the email"],
 	},
 	locations: {
-		type: [String], 
+		type: Object, 
 		required: [true, "Please provide at least one location"],
-		validate: {
-			validator: function (locations) {
-				return locations.length > 0;
-			},
-			message: "Institute must have at least one location",
-		},
 	},
     authLink: {
         type: String,

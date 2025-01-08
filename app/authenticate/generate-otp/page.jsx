@@ -6,13 +6,13 @@ export const metadata = {
 
 const Page = async ({ searchParams }) => {
 
-	let { instituteCode } = searchParams;
+	let { instituteCode, redirect_url } = searchParams;
 
 	if (instituteCode) {
 		instituteCode = instituteCode.split("?")[0];
 	}
 
-	return <GenerateOtpForm instituteCode={instituteCode} />;
+	return <GenerateOtpForm instituteCode={instituteCode} redirect_url={redirect_url} />;
 };
 
 export default Page;

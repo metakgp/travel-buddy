@@ -6,8 +6,9 @@ export const metadata = {
 	title: "Enter OTP for Email verification",
 };
 
-const Page = async () => {
-
+const Page = async ({ searchParams }) => {
+	const { redirect_url } = searchParams;
+	console.log(redirect_url);
 	const cookieStore = cookies();
 	const cookie = cookieStore.get("otpData");
 
@@ -23,11 +24,16 @@ const Page = async () => {
 
 	const { email, hashData, instituteCode } = JSON.parse(token);
 
-	if(!email || !hashData || !instituteCode){
+	if (!email || !hashData || !instituteCode) {
 		redirect("/authenticate/generate-otp");
 	}
 
-	return <VerifyOtpForm email={email} hashData={hashData} instituteCode={instituteCode} />;
+	return <VerifyOtpForm 
+		email={email} 
+		hashData={hashData} 
+		instituteCode={instituteCode} 
+		redirect_url={redirect_url} 
+	/>;
 };
 
 export default Page;

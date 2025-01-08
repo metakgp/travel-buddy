@@ -19,7 +19,7 @@ export async function POST(req) {
         const emailDomain = email.split("@")[1];
 
         if (emailDomain != institute.domain) {
-            throw new Error("Error during email domain validation.");
+            throw new Error("Invalid email. Choose the correct institute.");
         }
 
         const otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });

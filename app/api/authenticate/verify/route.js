@@ -80,7 +80,7 @@ export async function POST(req) {
 
         return NextResponse.json(
             {
-                message: "OTP is valid, Verification successful!",
+                message: "OTP verified successfully!",
             },
             {
                 status: 200,

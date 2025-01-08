@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
+const VerifyOtpForm = ({ email, hashData, instituteCode, redirect_url }) => {
 
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
@@ -13,16 +13,16 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
     setOtp(e.target.value);
   };
 
-  const check = () =>{
+  const check = () => {
     if (!hashData || !instituteCode || !email) {
       alert("Invalid access. Redirecting to authentication page.");
       router.push("/authenticate");
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     check();
-  },[])
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +49,7 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
     if (res.ok) {
       const json = await res.json();
       alert(json.message);
-      router.push("/register?instituteCode=" + instituteCode);
+      router.push("/register?instituteCode=" + instituteCode + "&redirect_url=" + redirect_url);
     } else {
       const json = await res.json();
       alert(json.message);
@@ -83,11 +83,11 @@ const VerifyOtpForm = ({ email, hashData, instituteCode }) => {
           type="submit"
           disabled={loading}
           className={`w-full p-2 rounded-md transition ${loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 text-white hover:bg-blue-600"
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-500 text-white hover:bg-blue-600"
             }`}
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Verifying..." : "Verify"}
         </button>
       </form>
     </div>
