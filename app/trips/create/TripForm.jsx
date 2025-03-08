@@ -1,33 +1,40 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
 import { today } from "@/app/utils/date";
 import { verifyUser } from "@/app/utils/auth";
 import data from "@/app/data.json";
+import { userInstituteDetails } from "@/app/utils/institute";
 
 const TripForm = () => {
 	const router = useRouter();
+	const pathname = usePathname();
 	const [loading, setLoading] = useState(true);
-
+	const [locations, setLocations] = useState({});
 	const [email, setEmail] = useState("");
 
 	const check = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/authenticate");
+			router.push("/authenticate?redirect_path=" + pathname);
 			return;
 		}
 		const token = localStorage.getItem("travelbuddy");
 		const email = await verifyUser({ token });
 		if (!email) {
 			localStorage.removeItem("travelbuddy");
-			router.push("/authenticate");
+			router.push("/authenticate?redirect_path=" + pathname);
 			return;
 		}
 		setEmail(email);
-
+		try {
+			const userInstitue = await userInstituteDetails({email});
+			setLocations(userInstitue.locations);
+		} catch (error) {
+			router.push("/");
+		}
 		setLoading(false);
 	};
 
@@ -155,9 +162,9 @@ const TripForm = () => {
 					className="border rounded-md p-2 w-full"
 				>
 					<option value="">Select Source</option>
-					{Object.keys(data.locations).map((location) => (
+					{Object.keys(locations).map((location) => (
 						<option key={location} value={location}>
-							{data.locations[location]}
+							{locations[location]}
 						</option>
 					))}
 				</select>
@@ -173,9 +180,9 @@ const TripForm = () => {
 					className="border rounded-md p-2 w-full"
 				>
 					<option value="">Select Destination</option>
-					{Object.keys(data.locations).map((location) => (
+					{Object.keys(locations).map((location) => (
 						<option key={location} value={location}>
-							{data.locations[location]}
+							{locations[location]}
 						</option>
 					))}
 				</select>

@@ -1,19 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 import mapping from "@/app/data.json";
+import { userInstituteDetails } from "@/app/utils/institute";
 
-const TripDetails = ({ tripID }) => {
+const TripDetails = ({ tripID, email }) => {
 	const router = useRouter();
-
+	const pathname = usePathname();
 	const [data, setData] = useState(null);
+	const [locations, setLocations] = useState({});
 
 	const getDetails = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/authenticate");
+			router.push("/authenticate?redirect_path=" + pathname);
 			return;
+		}
+		try {
+			const userInstitue = await userInstituteDetails({ email });
+			setLocations(userInstitue.locations);
+		} catch (error) {
+			router.push("/");
 		}
 		const res = await fetch("/api/trips/find", {
 			method: "POST",
@@ -107,11 +115,11 @@ const TripDetails = ({ tripID }) => {
 				<strong>Email: </strong> {data.trip.email}
 			</p>
 			<p>
-				<strong>Source:</strong> {mapping.locations[data.trip.source]}
+				<strong>Source:</strong> {locations[data.trip.source]}
 			</p>
 			<p>
 				<strong>Destination:</strong>{" "}
-				{mapping.locations[data.trip.destination]}
+				{locations[data.trip.destination]}
 			</p>
 			<p>
 				<strong>Date:</strong>{" "}
@@ -158,11 +166,11 @@ const TripDetails = ({ tripID }) => {
 						</p>
 						<p>
 							<strong>Source:</strong>{" "}
-							{mapping.locations[trip.source]}
+							{locations[trip.source]}
 						</p>
 						<p>
 							<strong>Destination:</strong>{" "}
-							{mapping.locations[trip.destination]}
+							{locations[trip.destination]}
 						</p>
 						<p>
 							<strong>Date:</strong>{" "}
