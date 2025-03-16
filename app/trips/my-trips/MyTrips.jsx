@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "@/app/utils/Loading";
 import mapping from "@/app/data.json";
 
 const MyTrips = () => {
 	const router = useRouter();
-
+	const pathname = usePathname();
 	const [myTrips, setMyTrips] = useState(null);
 
 	const getDetails = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/authenticate");
+			router.push("/authenticate?redirect_path=" + pathname);
 			return;
 		}
 		const res = await fetch("/api/trips/find", {

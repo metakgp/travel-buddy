@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AuthForm({ institutes }) {
+export default function AuthForm({ institutes, redirect_url }) {
 	const router = useRouter();
 
 	const check = () => {
@@ -28,7 +28,7 @@ export default function AuthForm({ institutes }) {
 			alert("Please select an institute");
 			return;
 		}
-		router.push("/register?instituteCode=" + institute);
+		router.push("/register?instituteCode=" + institute + "&redirect_url=" + redirect_url);
 		return;
 	};
 

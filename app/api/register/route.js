@@ -3,7 +3,7 @@ import sanitize from "mongo-sanitize";
 import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Axios from "axios";
 import { checkUser } from "@/app/utils/auth";
 import { instituteDetails } from "@/app/utils/institute";
@@ -11,7 +11,6 @@ import { instituteDetails } from "@/app/utils/institute";
 export async function POST(req) {
 	try {
 		req = await req.json();
-
 		// Form fields:
 		// i)	name – (Full Name) - Text
 		// ii)	roll – (Roll Number) – Text
@@ -20,7 +19,6 @@ export async function POST(req) {
 		// v)   instituteCode - (Institute Code) – Text
 
 		let { name, roll, number, instituteCode } = req;
-
 		const institute = await instituteDetails({ instituteCode });
 
 		let { authCookie, verifyAuthLink } = institute;
@@ -51,7 +49,26 @@ export async function POST(req) {
 			);
 		}
 
-		const response = await Axios.get(verifyAuthLink, {
+		const isExternal = verifyAuthLink.startsWith("http://") || verifyAuthLink.startsWith("https://");
+
+		let verifyrouteURL;
+
+		if (isExternal) {
+			verifyrouteURL = verifyAuthLink;
+		}
+
+		else {
+			const requestHeaders = headers();
+			const host = requestHeaders.get('host');
+			const protocol = requestHeaders.get('x-forwarded-proto') || 'http';
+			verifyrouteURL = protocol + "://" + host + verifyAuthLink;
+		}
+
+		if (!verifyrouteURL || verifyrouteURL === "") {
+			throw new Error("Invalid authentication verfiy URL.");
+		}
+
+		const response = await Axios.get(verifyrouteURL, {
 			headers: {
 				Cookie: Object.entries({
 					[authCookie]: token,
@@ -60,6 +77,11 @@ export async function POST(req) {
 					.join("; "),
 			},
 		});
+
+		if (!response || !response.data || !response.data.email) {
+			throw new Error("No JWT session token found.");
+		}
+
 		const email = response.data.email;
 
 		if (!email) {

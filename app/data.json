@@ -1,13 +1,4 @@
 {
-	"locations": {
-		"IIT": "IIT Kharagpur Campus",
-		"CCU": "Kolkata Airport",
-		"KGP": "Kharagpur Railway Station",
-		"HWH": "Howrah Railway Station",
-		"SDAH": "Sealdah Railway Station",
-		"HIJ": "Hijli Railway Station",
-		"CAT": "Kolkata CAT Centre(s)"
-	},
 	"slots": {
 		"0": "12 AM - 1 AM",
 		"1": "1 AM - 2 AM",

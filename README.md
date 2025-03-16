@@ -82,17 +82,20 @@ To set up Travel Buddy locally, follow these steps:
 3. Configure environment variables:
 
     - Create a `.env` file in the root directory.
-    - Add your MongoDB Atlas connection string:
+    - Copy the content from `.env.example` to `.env`:
+
+         ```bash
+           cp .env.example .env
+        ```
 
         ```env
         MONGODB_URI=your_mongodb_connection_string
-        ```
-
-    - Add your JWT secret key:
-
-        ```env
         JWT_SECRET=your_jwt_secret_key
+        HASH_SECRET=your_HmacSHA256_secret_key
+        SYSTEM_MAIL=your_email_address
+        SYSTEM_MAIL_PASS=your_email_address_password
         ```
+    - Replace placeholder values in the .env file with actual values.
 
 4. Run the application:
     ```sh
