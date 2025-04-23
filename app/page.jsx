@@ -4,7 +4,10 @@ const Home = () => {
 	return (
 		<div className="container text-center mt-24">
 			<h1 className="mb-4">Welcome to Travel Buddy</h1>
-			<h3>Find your travel partners for your next trip or train ride</h3>
+			<h3>
+				Find your travel partners to share your next trip with and{" "}
+				<u>SAVE MONEY</u>!
+			</h3>
 			<br />
 			<div className="d-flex justify-content-center gap-3">
 				<Link
@@ -36,10 +39,11 @@ const Home = () => {
 			</div>
 			<footer className="mt-5">
 				<p>
-					Please note that this application is made to help KGPians
-					with similiar travel plans. Any data submitted here will be
-					visible to others who input a similiar time slot. Please
-					consider before submitting any personal information.
+					Please note that this application is made to help students
+					who wish to share thier ride with someone with similiar
+					travel plans. Any data submitted here will be visible to
+					others who input a similiar time slot. Please consider
+					before submitting any personal information.
 				</p>
 				<Link
 					href="https://github.com/metakgp/travel-buddy"

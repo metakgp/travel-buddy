@@ -161,8 +161,8 @@ const TrainDetails = ({ trainID }) => {
 					</li>
 				))}
 			</ul>
-			Please <Link href="/trips">add trip(s)</Link> seperately to check
-			for common trips to/from the stations.
+			Please <Link href="/trips">Add Trip(s)</Link> seperately to find
+			people with common trips to/from the stations.
 			<button
 				onClick={() => router.push("/trains/my-trains")}
 				className="mt-2 w-full btn btn-primary"
