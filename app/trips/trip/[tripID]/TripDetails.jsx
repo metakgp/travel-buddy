@@ -114,8 +114,7 @@ const TripDetails = ({ tripID }) => {
 				{mapping.locations[data.trip.destination]}
 			</p>
 			<p>
-				<strong>Date:</strong>{" "}
-				{new Date(data.trip.date).toLocaleDateString()}
+				<strong>Date:</strong> {new Date(data.trip.date).toDateString()}
 				&nbsp;&nbsp;
 				<strong>Time Slot:</strong> {mapping.slots[data.trip.time]}
 			</p>
@@ -166,7 +165,7 @@ const TripDetails = ({ tripID }) => {
 						</p>
 						<p>
 							<strong>Date:</strong>{" "}
-							{new Date(trip.date).toLocaleDateString()}
+							{new Date(trip.date).toDateString()}
 							&nbsp;&nbsp;
 							<strong>Time Slot:</strong>{" "}
 							{mapping.slots[trip.time]}

@@ -111,7 +111,7 @@ const TrainDetails = ({ trainID }) => {
 			</p>
 			<p>
 				<strong>Date:</strong>{" "}
-				{new Date(data.train.date).toLocaleDateString()}
+				{new Date(data.train.date).toDateString()}
 			</p>
 			<h3 className="text-lg font-semibold mt-4">
 				Common Trains Trips (Same Train Number and Date):
@@ -156,7 +156,7 @@ const TrainDetails = ({ trainID }) => {
 						</p>
 						<p>
 							<strong>Date:</strong>{" "}
-							{new Date(train.date).toLocaleDateString()}
+							{new Date(train.date).toDateString()}
 						</p>
 					</li>
 				))}
