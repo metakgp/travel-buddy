@@ -1,35 +1,26 @@
 version: "3.8"
 
 services:
-    app:
-        image: travel-buddy-metakgp
-        container_name: travel-buddy-metakgp-app
-        ports:
-            - "3000:3000"
+    travel-buddy:
+        image: metakgporg/travel-buddy
+        container_name: travel-buddy-app
+        build: .
+        restart: always
         env_file:
             - .env
-
-services:
-  travel-buddy:
-    image: metakgporg/travel-buddy
-    container_name: travel-buddy-app
-    build: .
-    restart: always
-    env_file:
-      - .env
-    networks:
-      metaploy-network:
-        aliases:
-          - travel-buddy
-    volumes:
-      - nginx-config-volume:/etc/nginx/sites-enabled
+        networks:
+            metaploy-network:
+                aliases:
+                    - travel-buddy
+        volumes:
+            - nginx-config-volume:/etc/nginx/sites-enabled
 
 networks:
-  metaploy-network:
-    external: true
-    name: metaploy-network
+    metaploy-network:
+        external: true
+        name: metaploy-network
 
 volumes:
-  nginx-config-volume:
-    external: true
-    name: metaploy-nginx-config-volume
+    nginx-config-volume:
+        external: true
+        name: metaploy-nginx-config-volume
