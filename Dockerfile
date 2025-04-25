@@ -26,6 +26,9 @@ FROM node:18-alpine AS production
 RUN apk --no-cache add tzdata ca-certificates bash
 ENV TZ="Asia/Kolkata"
 
+# Add NPM
+RUN apk add --update npm
+
 # Step 9: Set working directory
 WORKDIR /app
 
