@@ -7,7 +7,7 @@ cleanup() {
 
 trap 'cleanup' SIGQUIT SIGTERM SIGHUP
 
-"${@}" &
+${@} &
 
 cp ./travel.metaploy.conf /etc/nginx/sites-enabled
 
