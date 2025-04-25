@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
     travel-buddy:
-        image: metakgporg/travel-buddy
+        image: metakgporg/travel-buddy-app
         container_name: travel-buddy-app
         build: .
         restart: always
