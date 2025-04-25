@@ -22,6 +22,10 @@ RUN npm run build
 # Step 8: Production stage
 FROM node:18-alpine AS production
 
+# Add BASH for metaploy postinstall script
+RUN apk --no-cache add tzdata ca-certificates bash
+ENV TZ="Asia/Kolkata"
+
 # Step 9: Set working directory
 WORKDIR /app
 
@@ -33,6 +37,7 @@ COPY --from=base /app/node_modules ./node_modules
 
 # Step 11: Copy metaploy stuff
 COPY metaploy/ ./
+RUN chmod +x ./postinstall.sh
 
 # Step 12: Set the command to start the application
 CMD ["./postinstall.sh", "npm start"]
