@@ -10,6 +10,11 @@ export default function AuthForm({ institutes }) {
 			router.push("/");
 			return;
 		}
+
+		if (institutes && institutes.length === 1) {
+			router.push("/register?instituteCode=" + institutes[0].code);
+			return;
+		}
 	};
 
 	useEffect(() => {
