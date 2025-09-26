@@ -13,7 +13,9 @@ const MyTrips = () => {
 
 	const getDetails = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/authenticate");
+			// Preserve current URL for redirect after authentication
+			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+			router.push(`/authenticate?redirect_url=${currentUrl}`);
 			return;
 		}
 		const res = await fetch("/api/trips/find", {

@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 const Page = async ({ searchParams }) => {
-	const { instituteCode } = searchParams;
+	const { instituteCode, redirect_url } = searchParams;
 
 	const institute = await instituteDetails({ instituteCode });
 
@@ -17,22 +17,27 @@ const Page = async ({ searchParams }) => {
 	const cookieStore = cookies();
 	const cookie = cookieStore.get(authCookie);
 
+	// Build the redirect URL for Heimdall with proper fallback
+	const finalRedirectUrl = redirect_url ? 
+		`https://travel.metakgp.org/register?instituteCode=${instituteCode}&redirect_url=${encodeURIComponent(redirect_url)}` :
+		`https://travel.metakgp.org/register?instituteCode=${instituteCode}`;
+
 	if (!cookie) {
-		redirect(authLink + "?redirect_url=https://travel.metakgp.org/");
+		redirect(authLink + "?redirect_url=" + encodeURIComponent(finalRedirectUrl));
 	}
 
 	const token = cookie.value;
 	if (!token) {
-		redirect(authLink + "?redirect_url=https://travel.metakgp.org/");
+		redirect(authLink + "?redirect_url=" + encodeURIComponent(finalRedirectUrl));
 	}
 
 	const email = JSON.parse(atob(token.split(".")[1])).email; // get the user email from jwt
 
 	if (!email) {
-		redirect(authLink + "?redirect_url=https://travel.metakgp.org/");
+		redirect(authLink + "?redirect_url=" + encodeURIComponent(finalRedirectUrl));
 	}
 
-	return <RegForm email={email} instituteCode={instituteCode} />;
+	return <RegForm email={email} instituteCode={instituteCode} redirectUrl={redirect_url} />;
 };
 
 export default Page;

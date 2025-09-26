@@ -16,14 +16,18 @@ const TripForm = () => {
 
 	const check = async () => {
 		if (!localStorage.getItem("travelbuddy")) {
-			router.push("/authenticate");
+			// Preserve current URL for redirect after authentication
+			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+			router.push(`/authenticate?redirect_url=${currentUrl}`);
 			return;
 		}
 		const token = localStorage.getItem("travelbuddy");
 		const email = await verifyUser({ token });
 		if (!email) {
 			localStorage.removeItem("travelbuddy");
-			router.push("/authenticate");
+			// Preserve current URL for redirect after authentication
+			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+			router.push(`/authenticate?redirect_url=${currentUrl}`);
 			return;
 		}
 		setEmail(email);
