@@ -22,10 +22,13 @@ export async function GET(req) {
 		setSessionCookie(sessionToken);
 		return NextResponse.json(
 			{ message: "User already registered!" },
-			{ status: 400 }
+			{ status: 201 }
 		);
 	}
-	return NextResponse.json({ message: "User not found!" }, { status: 200 });
+	return NextResponse.json(
+		{ message: "No Existing User found!" },
+		{ status: 200 }
+	);
 }
 
 export async function POST(req) {

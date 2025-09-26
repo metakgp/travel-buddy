@@ -19,7 +19,7 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 			setIsSubmitting(true);
 			try {
 				const res = await fetch("/api/register?email=" + email);
-				if (!res.ok) {
+				if (res.status === 201) {
 					router.push(redirectUrl);
 					return;
 				}
