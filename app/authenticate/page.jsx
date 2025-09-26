@@ -8,13 +8,13 @@ export const metadata = {
 	title: "Select Institute",
 };
 
-const Page = async () => {
+const Page = async ({ searchParams }) => {
 	await connectToDatabase();
 
 	// Return only names of Institues
 	const institutes = await Institute.find({}, { _id: 0, name: 1, code: 1 });
 
-	return <AuthForm institutes={JSON.parse(JSON.stringify(institutes))} />;
+	return <AuthForm institutes={JSON.parse(JSON.stringify(institutes))} redirectUrl={searchParams.redirect_url} />;
 };
 
 export default Page;

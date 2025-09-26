@@ -2,17 +2,19 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AuthForm({ institutes }) {
+export default function AuthForm({ institutes, redirectUrl }) {
 	const router = useRouter();
 
 	const check = () => {
 		if (localStorage.getItem("travelbuddy")) {
-			router.push("/");
+			// Redirect to original destination or homepage if no redirect URL
+			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
 			return;
 		}
 
 		if (institutes && institutes.length === 1) {
-			router.push("/register?instituteCode=" + institutes[0].code);
+			const redirectParam = redirectUrl ? `&redirect_url=${encodeURIComponent(redirectUrl)}` : '';
+			router.push("/register?instituteCode=" + institutes[0].code + redirectParam);
 			return;
 		}
 	};
@@ -33,7 +35,8 @@ export default function AuthForm({ institutes }) {
 			alert("Please select an institute");
 			return;
 		}
-		router.push("/register?instituteCode=" + institute);
+		const redirectParam = redirectUrl ? `&redirect_url=${encodeURIComponent(redirectUrl)}` : '';
+		router.push("/register?instituteCode=" + institute + redirectParam);
 		return;
 	};
 

@@ -5,7 +5,7 @@ import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
 import { checkUser } from "@/app/utils/auth";
 
-export default function RegForm({ email, instituteCode }) {
+export default function RegForm({ email, instituteCode, redirectUrl }) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [formData, setFormData] = useState({
@@ -17,14 +17,16 @@ export default function RegForm({ email, instituteCode }) {
 
 	const check = async () => {
 		if (localStorage.getItem("travelbuddy")) {
-			router.push("/");
+			// Redirect to original destination or homepage if no redirect URL
+			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
 			return;
 		}
 
 		const user = await checkUser({ email });
 		if (user) {
 			localStorage.setItem("travelbuddy", user);
-			router.push("/");
+			// Redirect to original destination or homepage if no redirect URL
+			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
 			return;
 		}
 
@@ -76,7 +78,8 @@ export default function RegForm({ email, instituteCode }) {
 			const json = await res.json();
 			alert(json.message);
 			localStorage.setItem("travelbuddy", json.user);
-			router.push("/");
+			// Redirect to original destination or homepage if no redirect URL
+			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
 		} else {
 			const json = await res.json();
 			alert(json.message);
