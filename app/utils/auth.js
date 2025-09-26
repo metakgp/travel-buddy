@@ -1,67 +1,82 @@
-"use server";
-
 import { connectToDatabase } from "@/app/lib/mongodb";
 import User from "@/app/models/User";
 import jwt from "jsonwebtoken";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export async function checkUser({ email }) {
+const SESSION_COOKIE = "travelbuddy";
+const SESSION_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+
+export async function findUserByEmail(email) {
+	if (!email) return null;
+
+	await connectToDatabase();
+
+	return User.findOne({ email: email });
+}
+
+export function signSessionToken(email) {
+	return jwt.sign({ email }, process.env.JWT_SECRET, {
+		expiresIn: SESSION_MAX_AGE,
+	});
+}
+
+export function verifySessionToken(token) {
+	if (!token) return null;
+
 	try {
-		if (!email || email === "") {
-			return null;
-		}
-
-		await connectToDatabase();
-
-		const user = await User.findOne({
-			email: email,
-		});
-
-		return user ? jwt.sign(email, process.env.JWT_SECRET) : null;
+		const payload = jwt.verify(token, process.env.JWT_SECRET);
+		return payload;
 	} catch (error) {
-		console.error("Error in checkUser:", error);
+		console.error("Error verifying session token:", error);
 		return null;
 	}
 }
 
-export async function verifyUser({ token }) {
-	try {
-		if (!token || token === "") {
-			return null;
-		}
+export function getSessionCookie() {
+	const cookieStore = cookies();
+	return cookieStore.get(SESSION_COOKIE)?.value ?? null;
+}
 
-		const email = jwt.verify(token, process.env.JWT_SECRET);
+export function setSessionCookie(token) {
+	const cookieStore = cookies();
+	cookieStore.set({
+		name: SESSION_COOKIE,
+		value: token,
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "lax",
+		maxAge: SESSION_MAX_AGE,
+		path: "/",
+	});
+}
 
-		const user = await checkUser({ email });
+export async function getSession() {
+	const token = getSessionCookie();
+	if (!token) return null;
 
-		return user ? email : null;
-	} catch (error) {
-		console.error("Error in verifyUser:", error);
-		return null;
-	}
+	const payload = verifySessionToken(token);
+	if (!payload?.email) return null;
+
+	const user = await findUserByEmail(payload.email);
+	if (!user) return null;
+
+	return { email: payload.email };
 }
 
 export async function checkAuth() {
-	try {
-		const headersList = headers();
-		const authorization = headersList.get("authorization");
-		if (!authorization) {
-			throw new Error("Unauthorized!");
-		}
-
-		const token = authorization.split(" ")[1];
-		if (!token) {
-			throw new Error("Unauthorized!");
-		}
-
-		const email = await verifyUser({ token });
-		if (!email) {
-			throw new Error("Unauthorized!");
-		}
-
-		return email;
-	} catch (error) {
-		console.error("Error in checkAuth:", error);
+	const session = await getSession();
+	if (!session) {
 		throw new Error("Unauthorized!");
 	}
+	return session.email;
+}
+
+export async function requireUser({ redirectPath = "/" } = {}) {
+	"use server";
+	const session = await getSession();
+
+	if (session) return session;
+
+	redirect("/authenticate?redirect_url=" + encodeURIComponent(redirectPath));
 }

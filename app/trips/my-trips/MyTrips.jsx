@@ -12,27 +12,22 @@ const MyTrips = () => {
 	const [myTrips, setMyTrips] = useState(null);
 
 	const getDetails = async () => {
-		if (!localStorage.getItem("travelbuddy")) {
-			// Preserve current URL for redirect after authentication
-			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-			router.push(`/authenticate?redirect_url=${currentUrl}`);
-			return;
-		}
 		const res = await fetch("/api/trips/find", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
+			credentials: "include",
 		});
 		if (res.ok) {
 			const json = await res.json();
 			setMyTrips(json.trips);
-		} else {
-			const json = await res.json();
-			alert(json.message);
-			router.push("/trips");
+			return;
 		}
+
+		const json = await res.json();
+		alert(json.message);
+		router.push("/trips");
 	};
 
 	useEffect(() => {

@@ -31,23 +31,15 @@ export async function DELETE(req) {
 
 		if (!trip) {
 			return NextResponse.json(
-				{
-					message: "Trip not found!",
-				},
-				{
-					status: 404,
-				}
+				{ message: "Trip not found!" },
+				{ status: 404 }
 			);
 		}
 
 		if (trip.email !== email) {
 			return NextResponse.json(
-				{
-					message: "You are not authorized to delete this trip!",
-				},
-				{
-					status: 401,
-				}
+				{ message: "You are not authorized to delete this trip!" },
+				{ status: 401 }
 			);
 		}
 
@@ -56,22 +48,14 @@ export async function DELETE(req) {
 		});
 
 		return NextResponse.json(
-			{
-				message: "Trip deleted successfully!",
-			},
-			{
-				status: 200,
-			}
+			{ message: "Trip deleted successfully!" },
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
 		return NextResponse.json(
-			{
-				message: "Something went wrong - Could not delete the trip.",
-			},
-			{
-				status: 500,
-			}
+			{ message: "Something went wrong - Could not delete the trip." },
+			{ status: 500 }
 		);
 	}
 }

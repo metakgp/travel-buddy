@@ -1,49 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Loading from "@/app/utils/Loading";
 import { useRouter } from "next/navigation";
-import { checkUser } from "@/app/utils/auth";
+import Loading from "@/app/utils/Loading";
 
-export default function RegForm({ email, instituteCode, redirectUrl }) {
+export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [formData, setFormData] = useState({
 		name: "",
 		roll: "",
 		number: "",
-		instituteCode: instituteCode
+		instituteCode,
 	});
 
-	const check = async () => {
-		if (localStorage.getItem("travelbuddy")) {
-			// Redirect to original destination or homepage if no redirect URL
-			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
-			return;
-		}
-
-		const user = await checkUser({ email });
-		if (user) {
-			localStorage.setItem("travelbuddy", user);
-			// Redirect to original destination or homepage if no redirect URL
-			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
-			return;
-		}
-
-		setLoading(false);
-	};
-
 	useEffect(() => {
-		check();
+		const checkUser = async () => {
+			setIsSubmitting(true);
+			try {
+				const res = await fetch("/api/register?email=" + email);
+				if (!res.ok) {
+					router.push(redirectUrl);
+					return;
+				}
+			} finally {
+				setIsSubmitting(false);
+			}
+		};
+		checkUser();
 	}, []);
-
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		setFormData({
-			...formData,
+		setFormData((prev) => ({
+			...prev,
 			[name]: value,
-		});
+		}));
 	};
 
 	const handleSubmit = async (e) => {
@@ -54,7 +46,6 @@ export default function RegForm({ email, instituteCode, redirectUrl }) {
 			return;
 		}
 
-		// check mobile number
 		if (!/^\d{10}$/.test(formData.number)) {
 			alert(
 				"Invalid mobile number! Please enter a valid 10 digit number."
@@ -62,33 +53,36 @@ export default function RegForm({ email, instituteCode, redirectUrl }) {
 			return;
 		}
 
-		setLoading(true);
+		setIsSubmitting(true);
 
-		const res = await fetch("/api/register", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(formData),
-		});
+		try {
+			const res = await fetch("/api/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify(formData),
+			});
 
-		setLoading(false);
-
-		if (res.ok) {
 			const json = await res.json();
+			if (res.ok) {
+				alert(json.message);
+				router.push(redirectUrl);
+				return;
+			}
+
 			alert(json.message);
-			localStorage.setItem("travelbuddy", json.user);
-			// Redirect to original destination or homepage if no redirect URL
-			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
-		} else {
-			const json = await res.json();
-			alert(json.message);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
-	return loading ? (
-		<Loading />
-	) : (
+	if (isSubmitting) {
+		return <Loading />;
+	}
+
+	return (
 		<form
 			onSubmit={handleSubmit}
 			className="bg-white p-6 rounded shadow-md w-full max-w-md"

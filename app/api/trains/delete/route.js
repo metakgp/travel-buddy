@@ -31,12 +31,8 @@ export async function DELETE(req) {
 
 		if (!train) {
 			return NextResponse.json(
-				{
-					message: "Train Trip not found!",
-				},
-				{
-					status: 404,
-				}
+				{ message: "Train Trip not found!" },
+				{ status: 404 }
 			);
 		}
 
@@ -46,9 +42,7 @@ export async function DELETE(req) {
 					message:
 						"You are not authorized to delete this train trip!",
 				},
-				{
-					status: 401,
-				}
+				{ status: 401 }
 			);
 		}
 
@@ -57,12 +51,8 @@ export async function DELETE(req) {
 		});
 
 		return NextResponse.json(
-			{
-				message: "Train Trip deleted successfully!",
-			},
-			{
-				status: 200,
-			}
+			{ message: "Train Trip deleted successfully!" },
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -71,9 +61,7 @@ export async function DELETE(req) {
 				message:
 					"Something went wrong - Could not delete the train trip.",
 			},
-			{
-				status: 500,
-			}
+			{ status: 500 }
 		);
 	}
 }

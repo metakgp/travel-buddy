@@ -11,46 +11,28 @@ const TrainDetails = ({ trainID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
-		if (!localStorage.getItem("travelbuddy")) {
-			// Preserve current URL for redirect after authentication
-			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-			router.push(`/authenticate?redirect_url=${currentUrl}`);
-			return;
-		}
 		const res = await fetch("/api/trains/find", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
+			credentials: "include",
 			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
 			setData(json);
-		} else {
-			const json = await res.json();
-			alert(json.message);
-			router.push("/trains");
+			return;
 		}
+		const json = await res.json();
+		alert(json.message);
+
+		router.push("/trains");
 	};
 
 	useEffect(() => {
 		getDetails();
 	}, [trainID]);
-
-	const copyTrainID = () => {
-		if (data) {
-			navigator.clipboard
-				.writeText(data.train.trainID)
-				.then(() => {
-					alert("Train Trip ID copied to clipboard!");
-				})
-				.catch((err) => {
-					console.error("Failed to copy: ", err);
-				});
-		}
-	};
 
 	const handleCall = (number) => {
 		window.open(`tel:${number}`);
@@ -67,8 +49,8 @@ const TrainDetails = ({ trainID }) => {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
+			credentials: "include",
 			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
@@ -86,16 +68,6 @@ const TrainDetails = ({ trainID }) => {
 			<h2 className="text-2xl font-bold mb-4 text-center">
 				Train Trip Details - {data.train.trainID}
 			</h2>
-			{/* <h3 className="text-lg font-semibold">
-				Train Trip ID:{" "}
-				<span className="text-blue-600">{data.train.trainID}</span>
-				<button
-					onClick={copyTrainID}
-					className="ml-2 text-sm text-white bg-blue-500 p-2 rounded hover:bg-blue-600 transition"
-				>
-					Copy Train Trip ID
-				</button>
-			</h3> */}
 			<p>
 				<strong>Name:</strong> {data.train.name}
 			</p>

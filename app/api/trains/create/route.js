@@ -63,13 +63,8 @@ export async function POST(req) {
 
 		await newTrain.save();
 		return NextResponse.json(
-			{
-				message: "Train trip saved successfully!",
-				trainID: trainID,
-			},
-			{
-				status: 200,
-			}
+			{ message: "Train trip saved successfully!", trainID: trainID },
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -79,9 +74,7 @@ export async function POST(req) {
 					error.message ||
 					"Something went wrong - Could not submit your train trip details.",
 			},
-			{
-				status: 500,
-			}
+			{ status: 500 }
 		);
 	}
 }

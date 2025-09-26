@@ -11,46 +11,27 @@ const TripDetails = ({ tripID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
-		if (!localStorage.getItem("travelbuddy")) {
-			// Preserve current URL for redirect after authentication
-			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-			router.push(`/authenticate?redirect_url=${currentUrl}`);
-			return;
-		}
 		const res = await fetch("/api/trips/find", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
+			credentials: "include",
 			body: JSON.stringify({ tripID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
 			setData(json);
-		} else {
-			const json = await res.json();
-			alert(json.message);
-			router.push("/trips");
+			return;
 		}
+		const json = await res.json();
+		alert(json.message);
+		router.push("/trips");
 	};
 
 	useEffect(() => {
 		getDetails();
 	}, [tripID]);
-
-	const copyTripID = () => {
-		if (data) {
-			navigator.clipboard
-				.writeText(data.trip.tripID)
-				.then(() => {
-					alert("Trip ID copied to clipboard!");
-				})
-				.catch((err) => {
-					console.error("Failed to copy: ", err);
-				});
-		}
-	};
 
 	const handleCall = (number) => {
 		window.open(`tel:${number}`);
@@ -67,8 +48,8 @@ const TripDetails = ({ tripID }) => {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
 			},
+			credentials: "include",
 			body: JSON.stringify({ tripID }),
 		});
 		if (res.ok) {
@@ -86,16 +67,6 @@ const TripDetails = ({ tripID }) => {
 			<h2 className="text-2xl font-bold mb-4 text-center">
 				Trip Details - {data.trip.tripID}
 			</h2>
-			{/* <h3 className="text-lg font-semibold">
-				Trip ID:{" "}
-				<span className="text-blue-600">{data.trip.tripID}</span>
-				<button
-					onClick={copyTripID}
-					className="ml-2 text-sm text-white bg-blue-500 p-2 rounded hover:bg-blue-600 transition"
-				>
-					Copy Trip ID
-				</button>
-			</h3> */}
 			<p>
 				<strong>Name:</strong> {data.trip.name}
 			</p>

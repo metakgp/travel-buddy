@@ -71,13 +71,8 @@ export async function POST(req) {
 
 		await newTrip.save();
 		return NextResponse.json(
-			{
-				message: "Trip saved successfully!",
-				tripID: tripID,
-			},
-			{
-				status: 200,
-			}
+			{ message: "Trip saved successfully!", tripID: tripID },
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -87,9 +82,7 @@ export async function POST(req) {
 					error.message ||
 					"Something went wrong - Could not submit your trip details.",
 			},
-			{
-				status: 500,
-			}
+			{ status: 500 }
 		);
 	}
 }

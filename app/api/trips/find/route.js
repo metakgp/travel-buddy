@@ -24,13 +24,8 @@ export async function GET() {
 		});
 
 		return NextResponse.json(
-			{
-				message: "Your Trips!",
-				trips: trips,
-			},
-			{
-				status: 200,
-			}
+			{ message: "Your Trips!", trips: trips },
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -40,9 +35,7 @@ export async function GET() {
 					error.message ||
 					"Something went wrong - Could not fetch your trips.",
 			},
-			{
-				status: 500,
-			}
+			{ status: 500 }
 		);
 	}
 }
@@ -80,23 +73,15 @@ export async function POST(req) {
 
 		if (!trip) {
 			return NextResponse.json(
-				{
-					message: "Trip not found!",
-				},
-				{
-					status: 404,
-				}
+				{ message: "Trip not found!" },
+				{ status: 404 }
 			);
 		}
 
 		if (trip.email !== email) {
 			return NextResponse.json(
-				{
-					message: "You are not authorized to see this trip!",
-				},
-				{
-					status: 401,
-				}
+				{ message: "You are not authorized to see this trip!" },
+				{ status: 401 }
 			);
 		}
 
@@ -178,9 +163,7 @@ export async function POST(req) {
 				},
 				similiar: similiar,
 			},
-			{
-				status: 200,
-			}
+			{ status: 200 }
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -190,9 +173,7 @@ export async function POST(req) {
 					error.message ||
 					"Something went wrong - Could not fetch trips.",
 			},
-			{
-				status: 500,
-			}
+			{ status: 500 }
 		);
 	}
 }

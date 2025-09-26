@@ -1,43 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loading from "@/app/utils/Loading";
 import Link from "next/link";
 import { today } from "@/app/utils/date";
-import { verifyUser } from "@/app/utils/auth";
 
-const TrainForm = () => {
+const TrainForm = ({ email }) => {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
-
-	const [email, setEmail] = useState("");
-
-	const check = async () => {
-		if (!localStorage.getItem("travelbuddy")) {
-			// Preserve current URL for redirect after authentication
-			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-			router.push(`/authenticate?redirect_url=${currentUrl}`);
-			return;
-		}
-		const token = localStorage.getItem("travelbuddy");
-		const email = await verifyUser({ token });
-		if (!email) {
-			localStorage.removeItem("travelbuddy");
-			// Preserve current URL for redirect after authentication
-			const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
-			router.push(`/authenticate?redirect_url=${currentUrl}`);
-			return;
-		}
-		setEmail(email);
-
-		setLoading(false);
-	};
-
-	useEffect(() => {
-		check();
-	}, []);
-
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [formData, setFormData] = useState({
 		trainNumber: "",
 		date: "",
@@ -45,10 +16,10 @@ const TrainForm = () => {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		setFormData({
-			...formData,
+		setFormData((prev) => ({
+			...prev,
 			[name]: value,
-		});
+		}));
 	};
 
 	const handleSubmit = async (e) => {
@@ -59,32 +30,35 @@ const TrainForm = () => {
 			return;
 		}
 
-		setLoading(true);
+		setIsSubmitting(true);
 
-		const res = await fetch("/api/trains/create", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("travelbuddy")}`,
-			},
-			body: JSON.stringify(formData),
-		});
+		try {
+			const res = await fetch("/api/trains/create", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
 
-		setLoading(false);
-
-		if (res.ok) {
-			const json = await res.json();
-			alert(json.message);
-			router.push(`/trains/train/${json.trainID}`);
-		} else {
-			const json = await res.json();
-			alert(json.message);
+			if (res.ok) {
+				const json = await res.json();
+				alert(json.message);
+				router.push(`/trains/train/${json.trainID}`);
+			} else {
+				const json = await res.json();
+				alert(json.message);
+			}
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
-	return loading ? (
-		<Loading />
-	) : (
+	if (isSubmitting) {
+		return <Loading />;
+	}
+
+	return (
 		<form
 			onSubmit={handleSubmit}
 			className="bg-white p-6 rounded shadow-md w-full max-w-md"
@@ -92,7 +66,6 @@ const TrainForm = () => {
 			<h2 className="text-2xl font-bold mb-4 text-center">
 				Create New Train Trip
 			</h2>
-			{/* Form fields */}
 			<div className="mb-4">
 				<label className="block text-gray-700">Email Address:</label>
 				<input
@@ -126,9 +99,10 @@ const TrainForm = () => {
 					className="border rounded-md p-2 w-full"
 				/>
 			</div>
-			Please <Link href="/trips">add trip(s)</Link> seperately to check
-			for common trips to/from the stations.
-			<br />
+			<p>
+				Please <Link href="/trips">add trip(s)</Link> separately to
+				check for common trips to/from the stations.
+			</p>
 			<br />
 			<div>
 				<button type="submit" className="w-full btn btn-primary">

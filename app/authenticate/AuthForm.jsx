@@ -1,29 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function AuthForm({ institutes, redirectUrl }) {
 	const router = useRouter();
-
-	const check = () => {
-		if (localStorage.getItem("travelbuddy")) {
-			// Redirect to original destination or homepage if no redirect URL
-			router.push(redirectUrl ? decodeURIComponent(redirectUrl) : "/");
-			return;
-		}
-
-		if (institutes && institutes.length === 1) {
-			const redirectParam = redirectUrl ? `&redirect_url=${encodeURIComponent(redirectUrl)}` : '';
-			router.push("/register?instituteCode=" + institutes[0].code + redirectParam);
-			return;
-		}
-	};
-
-	useEffect(() => {
-		check();
-	}, []);
-
-	const [institute, setInstitute] = useState("");
+	const [institute, setInstitute] = useState(
+		institutes.length === 1 ? institutes[0].code : ""
+	);
 
 	const handleChange = (e) => {
 		setInstitute(e.target.value);
@@ -35,10 +18,16 @@ export default function AuthForm({ institutes, redirectUrl }) {
 			alert("Please select an institute");
 			return;
 		}
-		const redirectParam = redirectUrl ? `&redirect_url=${encodeURIComponent(redirectUrl)}` : '';
-		router.push("/register?instituteCode=" + institute + redirectParam);
-		return;
+		router.push(
+			`/register?instituteCode=${institute}&redirect_url=${encodeURIComponent(
+				redirectUrl
+			)}`
+		);
 	};
+
+	useEffect(() => {
+		if (institutes.length == 1) handleSubmit(new Event("submit"));
+	}, [institutes]);
 
 	return (
 		<div className="flex items-center justify-center">
