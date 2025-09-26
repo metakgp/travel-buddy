@@ -6,6 +6,39 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import { checkAuth } from "@/app/utils/auth";
 import { today } from "@/app/utils/date";
 
+export async function GET() {
+	try {
+		const email = await checkAuth();
+
+		await connectToDatabase(); // redundant but okay
+
+		// // Delete old entries
+		// const dateObj = today();
+		// await Train.deleteMany({
+		// 	date: { $lt: dateObj.toISOString().slice(0, 10) },
+		// });
+
+		const trains = await Train.find({
+			email: email,
+		});
+
+		return NextResponse.json(
+			{ message: "Your Train Trips!", trains: trains },
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.log(error.message);
+		return NextResponse.json(
+			{
+				message:
+					error.message ||
+					"Something went wrong - Could not fetch your train trips.",
+			},
+			{ status: 500 }
+		);
+	}
+}
+
 export async function POST(req) {
 	try {
 		const email = await checkAuth();

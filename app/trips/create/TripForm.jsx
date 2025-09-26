@@ -46,7 +46,7 @@ const TripForm = ({ email }) => {
 		setIsSubmitting(true);
 
 		try {
-			const res = await fetch("/api/trips/create", {
+			const res = await fetch("/api/trips", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

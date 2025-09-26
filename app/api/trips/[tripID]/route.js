@@ -5,46 +5,10 @@ import validator from "validator";
 import { connectToDatabase } from "@/app/lib/mongodb";
 import { checkAuth } from "@/app/utils/auth";
 import User from "@/app/models/User";
-import { today } from "@/app/utils/date";
 
-export async function GET() {
+export async function GET(req, { params }) {
 	try {
 		const email = await checkAuth();
-
-		await connectToDatabase(); // redundant but okay
-
-		// // Delete old entries
-		// const dateObj = today();
-		// await Trip.deleteMany({
-		// 	date: { $lt: dateObj.toISOString().slice(0, 10) },
-		// });
-
-		const trips = await Trip.find({
-			email: email,
-		});
-
-		return NextResponse.json(
-			{ message: "Your Trips!", trips: trips },
-			{ status: 200 }
-		);
-	} catch (error) {
-		console.log(error.message);
-		return NextResponse.json(
-			{
-				message:
-					error.message ||
-					"Something went wrong - Could not fetch your trips.",
-			},
-			{ status: 500 }
-		);
-	}
-}
-
-export async function POST(req) {
-	try {
-		const email = await checkAuth();
-
-		req = await req.json();
 
 		// Return fields:
 		// i)	email – (Email) - string - format email
@@ -54,7 +18,8 @@ export async function POST(req) {
 		// vi)	source – (Source) – drop down - 3 options: IIT, KGP, HWH, CCU
 		// vii)	destination – (Destination) – drop down - 3 options: IIT, KGP, HWH, CCU
 
-		let { tripID } = req;
+		let { tripID } = params;
+
 		// if trip id is not a number
 		if (!validator.isNumeric(tripID)) {
 			throw new Error("Please give a valid trip ID!");
@@ -173,6 +138,59 @@ export async function POST(req) {
 					error.message ||
 					"Something went wrong - Could not fetch trips.",
 			},
+			{ status: 500 }
+		);
+	}
+}
+
+export async function DELETE(req, { params }) {
+	try {
+		const email = await checkAuth();
+
+		let { tripID } = params;
+
+		// if trip id is not a number
+		if (!validator.isNumeric(tripID)) {
+			throw new Error("Please give a valid trip ID!");
+		}
+		tripID = sanitize(tripID).trim();
+
+		if (validator.isEmpty(tripID)) {
+			throw new Error("Please give a trip ID!");
+		}
+
+		await connectToDatabase(); // redundant but okay
+
+		const trip = await Trip.findOne({
+			tripID: tripID,
+		});
+
+		if (!trip) {
+			return NextResponse.json(
+				{ message: "Trip not found!" },
+				{ status: 404 }
+			);
+		}
+
+		if (trip.email !== email) {
+			return NextResponse.json(
+				{ message: "You are not authorized to delete this trip!" },
+				{ status: 401 }
+			);
+		}
+
+		await Trip.deleteOne({
+			tripID: tripID,
+		});
+
+		return NextResponse.json(
+			{ message: "Trip deleted successfully!" },
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.log(error.message);
+		return NextResponse.json(
+			{ message: "Something went wrong - Could not delete the trip." },
 			{ status: 500 }
 		);
 	}

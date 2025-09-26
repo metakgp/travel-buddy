@@ -11,13 +11,9 @@ const TrainDetails = ({ trainID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
-		const res = await fetch("/api/trains/find", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+		const res = await fetch("/api/trains/" + trainID, {
+			method: "GET",
 			credentials: "include",
-			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
@@ -45,13 +41,9 @@ const TrainDetails = ({ trainID }) => {
 	const deleteTrain = async (trainID) => {
 		if (!confirm("Are you sure you want to delete this train?")) return;
 
-		const res = await fetch("/api/trains/delete", {
+		const res = await fetch("/api/trains/" + trainID, {
 			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
 			credentials: "include",
-			body: JSON.stringify({ trainID }),
 		});
 		if (res.ok) {
 			const json = await res.json();

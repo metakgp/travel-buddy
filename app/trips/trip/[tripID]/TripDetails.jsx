@@ -11,13 +11,9 @@ const TripDetails = ({ tripID }) => {
 	const [data, setData] = useState(null);
 
 	const getDetails = async () => {
-		const res = await fetch("/api/trips/find", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+		const res = await fetch("/api/trips/" + tripID, {
+			method: "GET",
 			credentials: "include",
-			body: JSON.stringify({ tripID }),
 		});
 		if (res.ok) {
 			const json = await res.json();
@@ -44,13 +40,9 @@ const TripDetails = ({ tripID }) => {
 	const deleteTrip = async (tripID) => {
 		if (!confirm("Are you sure you want to delete this trip?")) return;
 
-		const res = await fetch("/api/trips/delete", {
+		const res = await fetch("/api/trips/" + tripID, {
 			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
 			credentials: "include",
-			body: JSON.stringify({ tripID }),
 		});
 		if (res.ok) {
 			const json = await res.json();

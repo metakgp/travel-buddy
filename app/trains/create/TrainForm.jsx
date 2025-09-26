@@ -33,7 +33,7 @@ const TrainForm = ({ email }) => {
 		setIsSubmitting(true);
 
 		try {
-			const res = await fetch("/api/trains/create", {
+			const res = await fetch("/api/trains", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

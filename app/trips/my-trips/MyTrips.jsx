@@ -12,7 +12,7 @@ const MyTrips = () => {
 	const [myTrips, setMyTrips] = useState(null);
 
 	const getDetails = async () => {
-		const res = await fetch("/api/trips/find", {
+		const res = await fetch("/api/trips", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",

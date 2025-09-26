@@ -11,7 +11,7 @@ const MyTrains = () => {
 	const [myTrains, setMyTrains] = useState(null);
 
 	const getDetails = async () => {
-		const res = await fetch("/api/trains/find", {
+		const res = await fetch("/api/trains", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
