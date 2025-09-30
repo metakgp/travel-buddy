@@ -20,7 +20,7 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 			try {
 				const res = await fetch("/api/register?email=" + email);
 				if (res.status === 201) {
-					router.push(redirectUrl);
+					window.location.href = redirectUrl;
 					return;
 				}
 			} finally {
