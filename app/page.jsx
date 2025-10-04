@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import StatsSection from "./lib/StatsSection";
-import Footer from "./lib/footer";
+import Footer from "./lib/Footer";
 
 const Home = () => {
 	return (

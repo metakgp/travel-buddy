@@ -1,6 +1,6 @@
 import Link from "next/link";
 import StatsSection from "../lib/StatsSection";
-import Footer from "../lib/footer";
+import Footer from "../lib/Footer";
 
 export const metadata = {
 	title: "Train Trips",
