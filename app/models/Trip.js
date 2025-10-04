@@ -35,5 +35,11 @@ const tripSchema = new Schema({
 	},
 });
 
+// Indexes to optimize frequent queries
+// 1) Matching trips by source/destination within date range and filtering by time
+tripSchema.index({ source: 1, destination: 1, date: 1, time: 1 });
+// 2) Listing trips for a user efficiently
+tripSchema.index({ email: 1 });
+
 const Trip = models.Trip || model("Trip", tripSchema);
 export default Trip;

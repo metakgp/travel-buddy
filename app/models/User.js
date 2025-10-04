@@ -28,9 +28,13 @@ const userSchema = new Schema({
 	instituteCode: {
 		type: String,
 		required: [true, "Please provide an institute code"],
-		ref: 'Institute'
-	}
+		ref: "Institute",
+	},
 });
+
+// Indexes to speed up common lookups
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ instituteCode: 1 });
 
 const User = models.User || model("User", userSchema);
 export default User;

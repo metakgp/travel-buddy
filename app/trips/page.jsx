@@ -1,12 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
+import StatsSection from "../lib/stats";
 
 export const metadata = {
 	title: "Trips",
 };
 
-const Page = () => {
+const Page = async () => {
 	return (
-		<div className="container text-center mt-5">
+		<div className="container text-center m-5">
 			<h1 className="mb-4">Welcome to Travel Buddy</h1>
 			<h3>
 				Find your travel partners to share your next trip with and{" "}
@@ -18,6 +20,7 @@ const Page = () => {
 				within +/- 3 hours of your own trip timing.
 			</h6>
 			<br />
+			<StatsSection showTrips={true} />
 			<div className="d-flex justify-content-center gap-3 align-items-center flex-wrap mb-3">
 				<Link
 					href="/trips/create"
@@ -52,10 +55,12 @@ const Page = () => {
 				 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none  focus:ring-yellow-500 font-medium rounded-full text-sm px-3 py-2 text-center transition-all duration-500"
 				>
 					<div className="gap-3 flex flex-row">
-						<img
+						<Image
 							src="/assets/user.png"
 							alt="Trip Icon"
 							className="w-8 h-8"
+							width={32}
+							height={32}
 						/>
 						<span> Contribute to the project </span>
 					</div>

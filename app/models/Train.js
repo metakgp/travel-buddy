@@ -25,5 +25,11 @@ const trainSchema = new Schema({
 	},
 });
 
+// Indexes to optimize frequent queries
+// 1) Matching trains by trainNumber and date
+trainSchema.index({ trainNumber: 1, date: 1 });
+// 2) Listing trains for a user efficiently
+trainSchema.index({ email: 1 });
+
 const Train = models.Train || model("Train", trainSchema);
 export default Train;
