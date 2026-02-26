@@ -11,24 +11,107 @@ import {
 	setSessionCookie,
 } from "@/app/utils/auth";
 import { instituteDetails } from "@/app/utils/institute";
+import { safeRedirectPath } from "@/app/utils/redirect";
 
 export async function GET(req) {
-	const url = new URL(req.url);
-	const email = url.searchParams.get("email");
+	try {
+		const url = new URL(req.url);
+		const instituteCode = url.searchParams.get("instituteCode");
+		const redirectUrl = safeRedirectPath(
+			url.searchParams.get("redirect_url"),
+		);
 
-	const checkUser = await findUserByEmail(email);
-	if (checkUser) {
-		const sessionToken = signSessionToken(email);
-		setSessionCookie(sessionToken);
+		// If instituteCode is not provided, return 400
+		if (!instituteCode) {
+			return NextResponse.json(
+				{ message: "Missing instituteCode!" },
+				{ status: 400 },
+			);
+		}
+
+		const institute = await instituteDetails({ instituteCode });
+		const { authCookie, verifyAuthLink, authLink } = institute;
+
+		const cookieStore = cookies();
+		const cookie = cookieStore.get(authCookie);
+		const finalRedirectUrl = redirectUrl
+			? `https://travel.metakgp.org/register?instituteCode=${instituteCode}&redirect_url=${encodeURIComponent(
+					redirectUrl,
+				)}`
+			: `https://travel.metakgp.org/register?instituteCode=${instituteCode}`;
+
+		// If auth cookie is not present, return 403 with message to login and redirect link
+		if (!cookie?.value) {
+			return NextResponse.json(
+				{
+					message: "You need to be logged in to continue!",
+					redirect:
+						authLink +
+						"?redirect_url=" +
+						encodeURIComponent(finalRedirectUrl),
+				},
+				{ status: 403 },
+			);
+		}
+
+		const ssoToken = cookie.value;
+		let email;
+		try {
+			const response = await Axios.get(verifyAuthLink, {
+				headers: {
+					Cookie: Object.entries({ [authCookie]: ssoToken })
+						.map(([key, value]) => `${key}=${value}`)
+						.join("; "),
+				},
+			});
+			email = response.data.email;
+		} catch (e) {
+			email = null;
+		}
+
+		// If email is not present in the response, return 403 with message to login and redirect link
+		if (!email) {
+			cookieStore.delete(authCookie);
+			return NextResponse.json(
+				{
+					message: "You need to be logged in to continue!",
+					redirect:
+						authLink +
+						"?redirect_url=" +
+						encodeURIComponent(finalRedirectUrl),
+				},
+				{ status: 403 },
+			);
+		}
+
+		const checkUser = await findUserByEmail(email);
+
+		// If user is already registered, create a session and return 201 with message
+		if (checkUser) {
+			const sessionToken = signSessionToken(email);
+			setSessionCookie(sessionToken);
+			return NextResponse.json(
+				{ message: "User already registered" },
+				{ status: 201 },
+			);
+		}
+
+		// If user is not registered, return 200 with email to prefill the registration form
 		return NextResponse.json(
-			{ message: "User already registered!" },
-			{ status: 201 }
+			{ message: "No Existing User found!", email: email },
+			{ status: 200 },
+		);
+	} catch (error) {
+		console.log(error.message);
+		return NextResponse.json(
+			{
+				message:
+					error.message ||
+					"Something went wrong - please try again later!",
+			},
+			{ status: 500 },
 		);
 	}
-	return NextResponse.json(
-		{ message: "No Existing User found!" },
-		{ status: 200 }
-	);
 }
 
 export async function POST(req) {
@@ -54,7 +137,7 @@ export async function POST(req) {
 		if (!cookie) {
 			return NextResponse.json(
 				{ message: "You need to be logged in to register!" },
-				{ status: 403 }
+				{ status: 403 },
 			);
 		}
 
@@ -62,7 +145,7 @@ export async function POST(req) {
 		if (!ssoToken) {
 			return NextResponse.json(
 				{ message: "You need to be logged in to register!" },
-				{ status: 403 }
+				{ status: 403 },
 			);
 		}
 
@@ -78,7 +161,7 @@ export async function POST(req) {
 		if (!email) {
 			return NextResponse.json(
 				{ message: "You need to be logged in to register!" },
-				{ status: 403 }
+				{ status: 403 },
 			);
 		}
 
@@ -111,7 +194,7 @@ export async function POST(req) {
 		if (checkUser) {
 			return NextResponse.json(
 				{ message: "User already registered! Please login." },
-				{ status: 400 }
+				{ status: 400 },
 			);
 		}
 
@@ -130,7 +213,7 @@ export async function POST(req) {
 
 		return NextResponse.json(
 			{ message: "Registration successful!" },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
@@ -140,7 +223,7 @@ export async function POST(req) {
 					error.message ||
 					"Something went wrong - please try again later!",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

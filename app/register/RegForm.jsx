@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/utils/Loading";
+import { safeRedirectPath } from "@/app/utils/redirect";
 
-export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
+export default function RegForm({ instituteCode, redirectUrl = "/" }) {
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [email, setEmail] = useState("");
 	const [formData, setFormData] = useState({
 		name: "",
 		roll: "",
@@ -15,19 +17,38 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 	});
 
 	useEffect(() => {
-		const checkUser = async () => {
+		const bootstrap = async () => {
 			setIsSubmitting(true);
 			try {
-				const res = await fetch("/api/register?email=" + email);
+				const res = await fetch(
+					"/api/register?instituteCode=" +
+						encodeURIComponent(instituteCode) +
+						"&redirect_url=" +
+						encodeURIComponent(safeRedirectPath(redirectUrl)),
+				);
+				const json = await res.json().catch(() => ({}));
+
 				if (res.status === 201) {
-					window.location.href = redirectUrl;
+					window.location.href = safeRedirectPath(redirectUrl);
 					return;
 				}
+
+				if (res.status === 403 && json?.redirect) {
+					window.location.href = json.redirect;
+					return;
+				}
+
+				if (res.ok && json?.email) {
+					setEmail(json.email);
+					return;
+				}
+
+				alert(json?.message || "Unable to continue registration.");
 			} finally {
 				setIsSubmitting(false);
 			}
 		};
-		checkUser();
+		bootstrap();
 	}, []);
 
 	const handleChange = (e) => {
@@ -48,7 +69,7 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 
 		if (!/^\d{10}$/.test(formData.number)) {
 			alert(
-				"Invalid mobile number! Please enter a valid 10 digit number."
+				"Invalid mobile number! Please enter a valid 10 digit number.",
 			);
 			return;
 		}
@@ -68,7 +89,7 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 			const json = await res.json();
 			if (res.ok) {
 				alert(json.message);
-				router.push(redirectUrl);
+				router.push(safeRedirectPath(redirectUrl));
 				return;
 			}
 
@@ -79,7 +100,7 @@ export default function RegForm({ email, instituteCode, redirectUrl = "/" }) {
 	};
 
 	if (isSubmitting) {
-		return <Loading />;
+		return <Loading text="Signing in..." />;
 	}
 
 	return (

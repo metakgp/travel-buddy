@@ -5,6 +5,7 @@ import { connectToDatabase } from "@/app/lib/mongodb";
 import Institute from "@/app/models/Institute";
 import AuthForm from "./AuthForm";
 import { getSession } from "@/app/utils/auth";
+import { safeRedirectPath } from "@/app/utils/redirect";
 
 export const metadata = {
 	title: "Select Institute",
@@ -13,7 +14,7 @@ export const metadata = {
 const Page = async ({ searchParams }) => {
 	const session = await getSession();
 	if (session?.email) {
-		redirect(searchParams.redirect_url || "/");
+		redirect(safeRedirectPath(searchParams.redirect_url));
 	}
 
 	await connectToDatabase();
