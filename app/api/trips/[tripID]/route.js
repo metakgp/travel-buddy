@@ -39,14 +39,14 @@ export async function GET(req, { params }) {
 		if (!trip) {
 			return NextResponse.json(
 				{ message: "Trip not found!" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		if (trip.email !== email) {
 			return NextResponse.json(
 				{ message: "You are not authorized to see this trip!" },
-				{ status: 401 }
+				{ status: 401 },
 			);
 		}
 
@@ -110,7 +110,7 @@ export async function GET(req, { params }) {
 						number: user.number,
 					};
 				} else return trip;
-			})
+			}),
 		);
 
 		const user = await User.findOne({
@@ -128,17 +128,23 @@ export async function GET(req, { params }) {
 				},
 				similiar: similiar,
 			},
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not fetch trips.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -168,14 +174,14 @@ export async function DELETE(req, { params }) {
 		if (!trip) {
 			return NextResponse.json(
 				{ message: "Trip not found!" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		if (trip.email !== email) {
 			return NextResponse.json(
 				{ message: "You are not authorized to delete this trip!" },
-				{ status: 401 }
+				{ status: 401 },
 			);
 		}
 
@@ -185,13 +191,19 @@ export async function DELETE(req, { params }) {
 
 		return NextResponse.json(
 			{ message: "Trip deleted successfully!" },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{ message: "Something went wrong - Could not delete the trip." },
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

@@ -36,14 +36,14 @@ export async function GET(req, { params }) {
 		if (!train) {
 			return NextResponse.json(
 				{ message: "Train Trip not found!" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
 		if (train.email !== email) {
 			return NextResponse.json(
 				{ message: "You are not authorized to see this train trip!" },
-				{ status: 401 }
+				{ status: 401 },
 			);
 		}
 
@@ -73,7 +73,7 @@ export async function GET(req, { params }) {
 						number: user.number,
 					};
 				} else return train;
-			})
+			}),
 		);
 
 		const user = await User.findOne({
@@ -91,17 +91,23 @@ export async function GET(req, { params }) {
 				},
 				similiar: similiar,
 			},
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not fetch train trips.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -131,7 +137,7 @@ export async function DELETE(req, { params }) {
 		if (!train) {
 			return NextResponse.json(
 				{ message: "Train Trip not found!" },
-				{ status: 404 }
+				{ status: 404 },
 			);
 		}
 
@@ -141,7 +147,7 @@ export async function DELETE(req, { params }) {
 					message:
 						"You are not authorized to delete this train trip!",
 				},
-				{ status: 401 }
+				{ status: 401 },
 			);
 		}
 
@@ -151,16 +157,22 @@ export async function DELETE(req, { params }) {
 
 		return NextResponse.json(
 			{ message: "Train Trip deleted successfully!" },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					"Something went wrong - Could not delete the train trip.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

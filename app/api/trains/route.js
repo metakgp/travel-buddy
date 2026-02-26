@@ -24,17 +24,23 @@ export async function GET() {
 
 		return NextResponse.json(
 			{ message: "Your Train Trips!", trains: trains },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not fetch your train trips.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -97,17 +103,23 @@ export async function POST(req) {
 		await newTrain.save();
 		return NextResponse.json(
 			{ message: "Train trip saved successfully!", trainID: trainID },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not submit your train trip details.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }

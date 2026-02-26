@@ -24,17 +24,23 @@ export async function GET() {
 
 		return NextResponse.json(
 			{ message: "Your Trips!", trips: trips },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not fetch your trips.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
@@ -105,17 +111,23 @@ export async function POST(req) {
 		await newTrip.save();
 		return NextResponse.json(
 			{ message: "Trip saved successfully!", tripID: tripID },
-			{ status: 200 }
+			{ status: 200 },
 		);
 	} catch (error) {
 		console.log(error.message);
+		if (error.message === "Unauthorized!") {
+			return NextResponse.json(
+				{ message: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
 		return NextResponse.json(
 			{
 				message:
 					error.message ||
 					"Something went wrong - Could not submit your trip details.",
 			},
-			{ status: 500 }
+			{ status: 500 },
 		);
 	}
 }
