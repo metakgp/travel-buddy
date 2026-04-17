@@ -106,6 +106,10 @@ const TripForm = ({ email }) => {
 
 			<div className="mb-4">
 				<label className="block text-gray-700">Time Slot:</label>
+				<p className="text-sm text-gray-500 mb-1">
+					The system will show common trips within +/- 3 hours of this
+					time slot.
+				</p>
 				<select
 					name="time"
 					value={formData.time}
