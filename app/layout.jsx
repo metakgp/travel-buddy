@@ -1,4 +1,5 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Notice from "./lib/Notice";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
 				<GoogleAnalytics gaId="G-Y0Z1ZF5667" />
 			</head>
 			<body>
+				<Notice />
 				<div className="flex items-center justify-center min-h-screen bg-gray-100">
 					{children}
 				</div>
