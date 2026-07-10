@@ -1,0 +1,317 @@
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
+	min-height: 100vh;
+}
+
+/* Profile Header */
+.profileHeader {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	border-radius: 16px;
+	padding: 2rem;
+	color: white;
+	margin-bottom: 2rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.userInfo h1 {
+	margin: 0 0 0.5rem 0;
+	font-size: 2rem;
+	font-weight: 700;
+}
+
+.email {
+	margin: 0 0 1rem 0;
+	opacity: 0.9;
+	font-size: 1.1rem;
+}
+
+.userDetails {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	font-size: 0.95rem;
+	opacity: 0.85;
+}
+
+/* Statistics Grid */
+.statsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 2rem;
+}
+
+.statCard {
+	background: white;
+	border-radius: 12px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.statCard h3 {
+	margin: 0 0 0.5rem 0;
+	font-size: 2.5rem;
+	font-weight: 700;
+	color: #667eea;
+}
+
+.statCard p {
+	margin: 0 0 0.5rem 0;
+	font-size: 1rem;
+	color: #666;
+	font-weight: 500;
+}
+
+.statDetail {
+	font-size: 0.85rem;
+	color: #999;
+}
+
+/* Tab Navigation */
+.tabContainer {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 2rem;
+	border-bottom: 2px solid #e0e0e0;
+}
+
+.tab {
+	padding: 0.75rem 1.5rem;
+	background: none;
+	border: none;
+	font-size: 1rem;
+	font-weight: 500;
+	color: #666;
+	cursor: pointer;
+	transition: all 0.2s;
+	border-bottom: 3px solid transparent;
+	margin-bottom: -2px;
+}
+
+.tab:hover {
+	color: #667eea;
+}
+
+.activeTab {
+	color: #667eea;
+	border-bottom-color: #667eea;
+	font-weight: 600;
+}
+
+/* Section */
+.section {
+	margin-bottom: 3rem;
+}
+
+.sectionTitle {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+	color: #333;
+}
+
+.emptyMessage {
+	text-align: center;
+	padding: 3rem;
+	color: #999;
+	font-size: 1.1rem;
+	background: #f9f9f9;
+	border-radius: 12px;
+}
+
+/* Card Grid */
+.cardGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 1.5rem;
+}
+
+/* Card */
+.card {
+	background: white;
+	border-radius: 12px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: transform 0.2s, box-shadow 0.2s;
+	border-left: 4px solid #667eea;
+}
+
+.card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.cardHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.route {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #333;
+}
+
+.trainNumber {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #333;
+}
+
+.deleteBtn {
+	background: none;
+	border: none;
+	font-size: 1.2rem;
+	cursor: pointer;
+	padding: 0.25rem 0.5rem;
+	border-radius: 6px;
+	transition: background 0.2s;
+}
+
+.deleteBtn:hover {
+	background: #fee;
+}
+
+.cardBody {
+	margin-bottom: 1rem;
+}
+
+.date,
+.time {
+	margin: 0.5rem 0;
+	color: #666;
+	font-size: 0.95rem;
+}
+
+.cardFooter {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 0.75rem;
+	border-top: 1px solid #f0f0f0;
+}
+
+.tripId,
+.trainId {
+	font-size: 0.85rem;
+	color: #999;
+	font-family: monospace;
+}
+
+/* Action Buttons */
+.actionButtons {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-top: 3rem;
+	flex-wrap: wrap;
+}
+
+.primaryBtn {
+	padding: 0.875rem 2rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+	box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.primaryBtn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.primaryBtn:active {
+	transform: translateY(0);
+}
+
+/* Error Container */
+.errorContainer {
+	text-align: center;
+	padding: 3rem;
+	max-width: 500px;
+	margin: 5rem auto;
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.errorContainer h2 {
+	color: #e74c3c;
+	margin-bottom: 1rem;
+}
+
+.errorContainer p {
+	color: #666;
+	margin-bottom: 2rem;
+}
+
+.errorContainer button {
+	padding: 0.75rem 2rem;
+	background: #667eea;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.errorContainer button:hover {
+	background: #5568d3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.container {
+		padding: 1rem;
+	}
+
+	.profileHeader {
+		padding: 1.5rem;
+	}
+
+	.userInfo h1 {
+		font-size: 1.5rem;
+	}
+
+	.statsGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.cardGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.actionButtons {
+		flex-direction: column;
+	}
+
+	.primaryBtn {
+		width: 100%;
+	}
+
+	.tabContainer {
+		overflow-x: auto;
+	}
+
+	.tab {
+		white-space: nowrap;
+	}
+}
